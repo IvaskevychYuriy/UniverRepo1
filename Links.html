@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        
+        <title>Web coding guide</title>
+
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
+</script>
+<![endif]-->
+        
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    </head>
+    
+    <body>
+        <header>
+            <h1>Top references for learning html, css, js</h1>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="Links.html">Links</a></li>
+                <li><a href="JS.html">JS</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <div>
+                <table class="outerTable">
+                    <tr>
+                        <td class="outerTd">
+                            <table>
+                                <tr><th>HTML</th></tr>
+                                <tr><td><a href="https://www.w3.org/community/webed/wiki/HTML">W3C</a></td></tr>
+                                <tr><td><a href="http://reference.sitepoint.com/html">SitePoint</a></td></tr>
+                                <tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">Mozilla Devs</a></td></tr>
+                                <tr><td><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms670168(v=vs.85).aspx">MSDN</a></td></tr>
+                                <tr><td><a href="http://devguru.com/technologies/html/home">Dev Guru</a></td></tr>
+                                <tr><td><a href="http://www.w3schools.com/html/default.asp">W3Schools</a></td></tr>
+                            </table>
+                        </td>
+                        <td class="outerTd">
+                            <table>
+                                <tr><th>CSS</th></tr>
+                                <tr><td><a href="https://www.w3.org/community/webed/wiki/CSS/Properties">W3C</a></td></tr>
+                                <tr><td><a href="http://reference.sitepoint.com/css">SitePoint</a></td></tr>
+                                <tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">Mozilla Devs</a></td></tr>
+                                <tr><td><a href="https://msdn.microsoft.com/en-us/library/ms531209.aspx">MSDN</a></td></tr>
+                                <tr><td><a href="http://quirksmode.org/css/contents.html">Quirksmode</a></td></tr>
+                                <tr><td><a href="http://www.w3schools.com/css/default.asp">W3Schools</a></td></tr>
+                            </table>
+                        </td>
+                        <td class="outerTd">
+                            <table>
+                                <tr><th>JS</th></tr>
+                                <tr><td><a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf">ECMA (pdf)</a></td></tr>
+                                <tr><td><a href="http://www.sitepoint.com/javascript/">SitePoint</a></td></tr>
+                                <tr><td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Mozilla Devs</a></td></tr>
+                                <tr><td><a href="https://msdn.microsoft.com/en-us/library/d1et7k7c.aspx">MSDN</a></td></tr>
+                                <tr><td><a href="http://devguru.com/technologies/javascript/home">Dev Guru</a></td></tr>
+                                <tr><td><a href="http://www.w3schools.com/js/default.asp">W3Schools</a></td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </main>
+        
+        <aside style="position:fixed; top:0; left:0; margin:0px; border:1px solid">
+            <div style="" id="showSettings"></div>
+            <div id="settings"> 
+                <p>background fading color:</p>
+                <input type="color" id="colorPicker">
+                <p>choose opacity:</p>
+                <input type="range" min="0" max="100" value="0" step="1" id="opacityPicker">
+                <p id="opac">0</p>
+            </div>
+        </aside>
+        
+        <div style="z-index:-1000;background-color:black; width:100%; height:100%; position:fixed; top:0; left:0; opacity:0" id="fader">
+        </div>
+        
+        <article>
+            <p> How to learn web programming? It's easy!<br>
+                Above are listed most useful and convenient links to sites with references. There are also a lot of examples and explanations to help you understand.
+            </p>
+        </article>
+        
+        <footer>
+            <ul>
+                <li>Contacts: +1234567890</li>
+                <li>|</li>
+                <li>&copy; All rights reserved</li>
+            </ul>
+        </footer>
+        
+        <script src="js/main.js"></script>
+    </body>
+</html>

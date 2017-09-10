@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        
+        <title>Web coding guide</title>
+
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
+</script>
+<![endif]-->
+        
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    </head>
+    
+    <body>
+        <header>
+            <h1>Best HTML5 websites</h1>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="Links.html">Links</a></li>
+                <li><a href="JS.html">JS</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <div class="carousel">
+                <figure class="carouselItem" id="currentItem">
+                    <a href="https://lightsaber.withgoogle.com/">
+                        <img src="img/lightsaber.png" alt="lightsaber escape">
+                    </a>
+                    <figcaption>Lightsaber escape by Google</figcaption>
+                </figure>
+                
+                <figure class="carouselItem">
+                    <a href="http://thelawofthejungle.com/">
+                        <img src="img/junglelaw.png" alt="the law of jungle">
+                    </a>
+                    <figcaption>The law of jungle</figcaption>
+                </figure>
+                
+                <figure class="carouselItem">
+                    <a href="https://eyezen-challenge.com/">
+                        <img src="img/eyezen.png" alt="eyezen challenge">
+                    </a>
+                    <figcaption>The eyezen challenge by Fnatic</figcaption>
+                </figure>
+                
+                <figure class="carouselItem">
+                    <a href="http://www.nationalgeographic.com/magazine/2016/05/yellowstone-national-parks-bears-video">
+                        <img src="img/beareye.png" alt="bear's eye view">
+                    </a>
+                    <figcaption>A Bear's-Eye View of Yellowstone by National Geographic</figcaption>
+                </figure>
+                
+                <figure class="carouselItem">
+                    <a href="https://cavalierchallenge.com/">
+                        <img src="img/cavalier.png" alt="cavalier challenge">
+                    </a>
+                    <figcaption>Cavalier challenge</figcaption>
+                </figure>
+                
+                <figure class="carouselItem">
+                    <a href="http://www.thisshell.com/">
+                        <img src="img/thisshell.png" alt="this shell song">
+                    </a>
+                    <figcaption>Video puzzle</figcaption>
+                </figure>
+                
+                <figure class="carouselItem">
+                    <a href="http://builtbybuffalo.com/">
+                        <img src="img/buffalo.png" alt="built by buffalo">
+                    </a>
+                    <figcaption>Built by buffalo site</figcaption>
+                </figure>
+                
+                <figure class="carouselItem">
+                    <a href="https://robertsspaceindustries.com/starmap">
+                        <img src="img/ark.png" alt="ark system">
+                    </a>
+                    <figcaption>Universe model</figcaption>
+                </figure>
+                
+                <button type="button" id="prev"></button>
+                <button type="button" id="next"></button>
+            </div>
+        </main>
+        
+        <aside style="position:fixed; top:0; left:0; margin:0px; border:1px solid">
+            <div style="" id="showSettings"></div>
+            <div id="settings"> 
+                <p>background fading color:</p>
+                <input type="color" id="colorPicker">
+                <p>choose opacity:</p>
+                <input type="range" min="0" max="100" value="0" step="1" id="opacityPicker">
+                <p id="opac">0</p>
+            </div>
+        </aside>
+        
+        <div style="z-index:-1000;background-color:black; width:100%; height:100%; position:fixed; top:0; left:0; opacity:0" id="fader">
+        </div>
+        
+        <article>
+            <p> Many different websites are created with a huge inspiration - take a       look at what they look like <br>
+                And there's no limit how far you can get.
+            </p>
+        </article>
+        
+        <footer>
+            <ul>
+                <li>Contacts: +1234567890</li> 
+                <li>|</li>
+                <li>&copy; All rights reserved</li>
+            </ul>
+        </footer>
+        
+        <script src="js/main.js"></script>
+    </body>
+</html>

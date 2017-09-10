@@ -1,0 +1,127 @@
+body{
+    background-color: #1A96D2;
+    font: 20px "Calibri";
+}
+ul {
+    margin:auto;
+    text-align: center;
+}
+ul li{
+    display:inline;
+    margin: 2%
+}
+ul li a
+{
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+}
+header, nav, main, footer, article{
+    border: none;
+    margin: 1% 0;
+    background-color: aliceblue;
+    box-shadow: 0px 0px 2px 1px lightblue;
+    text-align: center;
+}
+h1{
+    text-align: center;
+}
+.carousel, .gallery{
+    position: relative;
+    height: 40%;
+}
+.carouselItem{
+    display: none;
+    text-align: center;
+}
+#currentItem{
+    display:block;
+}
+#prev, #next{
+    height: 44px;
+    width: 44px;
+    opacity: 0.3;
+    position: absolute;
+    top: 45%;
+    background-repeat: no-repeat;
+}
+#prev:hover, #next:hover{
+    opacity: 0.6;
+}
+#prev{
+    left:0.5%;
+    background-image: url("../img/prev.png");
+}
+#next{
+    right: 0.5%;
+    background-image: url("../img/next.png");
+}
+.carousel img{
+    margin: 2%;
+    width: auto;
+    max-height: 400px;
+    max-width: 100%;
+    box-shadow: 0 0 10px 2px gold;
+}
+figcaption, .tooltip{
+    margin: 5%;
+    font-size: 25px;
+    background-color: #CAEDFE;
+    box-shadow: 0px 0px 3px 1px black;
+}
+
+
+table{
+    margin: auto;
+    width: 90%;
+    text-align: center;
+}
+.outerTd{
+    width: 28%;
+    margin: 2.5%;
+    display: inline-block;
+    box-shadow: 0 0 10px 2px gold;
+}
+th {
+    font-size: 25px;
+}
+td a{
+    text-decoration: none;   
+}
+#settings{
+    text-align:center;
+    position:absolute; 
+    border-radius: 15px;
+    background-color: #4FC3FB;
+    box-shadow: 1px 1px 5px red;
+    display: none;
+    
+}
+#showSettings {
+    height: 20px;
+    width:20px;
+    border: none;
+    background-image: url("../img/settings.png");
+}
+
+
+.galleryItem {
+    width: 20%;
+    height: auto;
+    display: inline-block;
+    position: relative;
+}
+.galleryItem img {
+    width: 100%;
+    box-shadow: none;
+}
+.galleryItem img:hover{
+    box-shadow: 0 0 10px 2px gold;
+}
+.tooltip {
+    position: absolute;
+    display: none;
+    top: 80%;
+    left: 20%;
+    z-index: 1;
+}
