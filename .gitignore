@@ -1,2 +1,7 @@
 host/temp/*
 host/logs/*
+
+**/.vs
+**/bin
+**/obj
+Web store/WebStoreApi/WebStore.DAL/Migrations/
