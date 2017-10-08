@@ -1,0 +1,11 @@
+<div style="margin: 5px !important">
+    <img src="{{product.pictureUrl}}" alt="{{product.name}}">
+    <h3>{{product.name}}</h3>
+    <p>{{product.description}}</p>
+
+    <input [(ngModel)]="buyAmount" type="number" min="1" matInput>
+    <button mat-icon-button>
+        <span>Add</span> 
+        <mat-icon>add_shopping_cart</mat-icon>
+    </button>
+</div>

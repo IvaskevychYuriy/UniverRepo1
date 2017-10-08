@@ -15,8 +15,10 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpOptionsInterceptor } from '../services/http-options.interceptor';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatToolbarModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule } from '@angular/material';
 import { NavbarComponent } from '../components/navbar/navbar.component';
+import { ProductCellComponent } from '../components/product-grid/product-cell/product-cell.component';
+import { ProductGridComponent } from '../components/product-grid/product-grid.component';
 
 @NgModule({
   imports: [
@@ -27,6 +29,7 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
+    MatGridListModule,
     routing
 ],
 declarations: [
@@ -35,7 +38,9 @@ declarations: [
     HomeComponent,
     SecretComponent,
     LoginComponent,
-    NavbarComponent
+    NavbarComponent,
+    ProductCellComponent,
+    ProductGridComponent
 ],
 providers: [
     AuthGuard,
