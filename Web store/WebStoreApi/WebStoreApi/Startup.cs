@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
+using WebStore.Api.Extensions;
+using System.Threading.Tasks;
 
 namespace WebStore.Api
 {
@@ -54,17 +56,25 @@ namespace WebStore.Api
                 options.Cookie.Expiration = TimeSpan.FromDays(150);
                 options.LoginPath = "/login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                //options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
             });
 
             services.AddCors();
+
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.SeedData();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -75,6 +85,7 @@ namespace WebStore.Api
 
             app.UseCors(cfg =>
             {
+                cfg.AllowCredentials();
                 cfg.AllowAnyMethod();
                 cfg.AllowAnyHeader();
                 cfg.WithOrigins("http://localhost:4200");
@@ -84,7 +95,7 @@ namespace WebStore.Api
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    template: "{controller}/{action}/{id?}");
             });
         }
     }

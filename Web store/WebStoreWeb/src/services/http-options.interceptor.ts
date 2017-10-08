@@ -14,7 +14,8 @@ export class HttpOptionsInterceptor implements HttpInterceptor {
 
         req = req.clone({
             url: baseUri + req.url,
-            headers: headers
+            headers: headers,
+            withCredentials: true
         });
 
         return next.handle(req);

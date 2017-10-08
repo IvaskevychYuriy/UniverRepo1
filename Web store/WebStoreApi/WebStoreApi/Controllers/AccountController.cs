@@ -44,7 +44,7 @@ namespace WebStore.Api.Controllers
         // POST: /Account/Login
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginInfoDTO model)
+        public async Task<IActionResult> Login([FromBody] LoginInfoDTO model)
         {
             if (ModelState.IsValid)
             {

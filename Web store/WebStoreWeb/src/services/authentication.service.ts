@@ -14,12 +14,15 @@ export class AuthenticationService {
         return this._userProfile;
     }
     
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { 
+        this._userProfile = JSON.parse(localStorage.getItem("currentUser"));
+    }
 
     login(model: LoginInfo) {
         return this.http.post('account/login', JSON.stringify(model))
             .map((response) => {
                 this._userProfile = response as UserProfile;
+                localStorage.setItem('currentUser', JSON.stringify(this._userProfile));
             });
     }
     
@@ -27,6 +30,7 @@ export class AuthenticationService {
         return this.http.post('account/register', JSON.stringify(model))
             .map((response) => {
                 this._userProfile = response as UserProfile;
+                localStorage.setItem('currentUser', JSON.stringify(this._userProfile));
             });
     }
 
@@ -34,6 +38,7 @@ export class AuthenticationService {
         return this.http.post('account/logout', null)
             .map((response) => {
                 this._userProfile = null;
+                localStorage.removeItem('currentUser');
             });
     }
 }
