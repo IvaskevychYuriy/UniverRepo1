@@ -14,11 +14,19 @@ import { SecretComponent } from '../components/secret/secret.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpOptionsInterceptor } from '../services/http-options.interceptor';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule, MatToolbarModule, MatIconModule } from '@angular/material';
+import { NavbarComponent } from '../components/navbar/navbar.component';
+
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
     routing
 ],
 declarations: [
@@ -26,7 +34,8 @@ declarations: [
     AlertComponent,
     HomeComponent,
     SecretComponent,
-    LoginComponent
+    LoginComponent,
+    NavbarComponent
 ],
 providers: [
     AuthGuard,

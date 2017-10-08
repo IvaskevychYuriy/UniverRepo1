@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http';
     moduleId: module.id.toString(),
     templateUrl: 'secret.component.html'
 })
-
 export class SecretComponent implements OnInit {
     private values: string[];
 

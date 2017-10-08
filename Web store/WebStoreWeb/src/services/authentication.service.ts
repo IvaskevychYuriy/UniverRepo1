@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 import { LoginInfo } from '../models/login-info';
 import { UserProfile } from '../models/user-profile';
 import { HttpClient } from '@angular/common/http';
@@ -35,10 +36,10 @@ export class AuthenticationService {
     }
 
     logout() {
+        this._userProfile = null;
+        localStorage.removeItem('currentUser');
+        
         return this.http.post('account/logout', null)
-            .map((response) => {
-                this._userProfile = null;
-                localStorage.removeItem('currentUser');
-            });
+            .toPromise();
     }
 }

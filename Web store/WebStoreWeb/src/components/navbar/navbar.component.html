@@ -1,0 +1,19 @@
+<mat-toolbar color="primary" role="header">
+    <span>Categories</span>
+    <span class="example-spacer"></span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button><mat-icon>add_shopping_cart</mat-icon></button>
+    <span class="example-spacer"></span>
+    <span class="example-spacer"></span>
+    <div *ngIf="userName">
+        <span class="nav-welcome-msg">Welcome, {{userName}}</span>
+        <button mat-icon-button class="btn-logout" (click)="logout()">
+            <span>Logout</span>
+            <mat-icon>input</mat-icon>
+        </button>
+    </div>
+    <div *ngIf="!userName">
+        <button mat-button (click)="login()">Login</button>
+        <button mat-button (click)="register()">Register</button>
+    </div>
+</mat-toolbar>

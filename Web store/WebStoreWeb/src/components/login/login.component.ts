@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
     moduleId: module.id.toString(),
     templateUrl: 'login.component.html'
 })
-
 export class LoginComponent implements OnInit, OnDestroy {
     private model: LoginInfo;
     private loading: boolean = false;

@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http';
     moduleId: module.id.toString(),
     templateUrl: 'home.component.html'
 })
-
 export class HomeComponent implements OnInit {
     private value: string;
 
