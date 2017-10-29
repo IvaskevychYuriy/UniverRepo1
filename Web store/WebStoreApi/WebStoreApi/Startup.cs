@@ -9,6 +9,7 @@ using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
 using WebStore.Api.Extensions;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace WebStore.Api
 {
@@ -68,6 +69,8 @@ namespace WebStore.Api
             services.AddCors();
 
             services.AddMvc();
+
+            services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

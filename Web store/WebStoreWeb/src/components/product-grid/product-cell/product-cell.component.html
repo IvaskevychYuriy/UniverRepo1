@@ -1,11 +1,13 @@
-<div style="margin: 5px !important">
+<mat-card class="list-content">
     <img src="{{product.pictureUrl}}" alt="{{product.name}}">
     <h3>{{product.name}}</h3>
-    <p>{{product.description}}</p>
+    <p class="product-description-small">{{product.description}}</p>
 
-    <input [(ngModel)]="buyAmount" type="number" min="1" matInput>
-    <button mat-icon-button>
-        <span>Add</span> 
-        <mat-icon>add_shopping_cart</mat-icon>
-    </button>
-</div>
+    <div class="add-to-cart-container">
+        <input matInput [(ngModel)]="buyAmount" type="number" min="1" class="buy-amount" required/>
+        <button mat-icon-button (click)="addToCart()">
+            <span>Add</span>
+            <mat-icon>add_shopping_cart</mat-icon>
+        </button>
+    </div>
+</mat-card>

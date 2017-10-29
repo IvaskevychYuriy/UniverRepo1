@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
     styleUrls: ['navbar.component.css']
 })
 export class NavbarComponent {
-
     constructor(
         private authService: AuthenticationService,
         private router: Router
@@ -34,5 +33,17 @@ export class NavbarComponent {
     
     register() {
         this.router.navigate(['/register']);
+    }
+
+    openAdminMenu() {
+        this.router.navigate(['/administration']);
+    }
+
+    openShoppingCart() {
+        this.router.navigate(['/cart']);
+    }
+
+    openOrderHistory() {
+        this.router.navigate(['/orders']);
     }
 }

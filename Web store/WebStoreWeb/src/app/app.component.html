@@ -1,7 +1,10 @@
 <div>
     <navbar-toolbar></navbar-toolbar>
-    <div class="container">
-        <router-outlet></router-outlet>
+    <div class="general-container">
+        <sidebar></sidebar>
+        <div class="router-container">
+            <router-outlet></router-outlet>
+        </div>
     </div>
     <alert></alert>
 </div>

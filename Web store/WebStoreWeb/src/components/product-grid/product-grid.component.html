@@ -1,5 +1,13 @@
-<mat-grid-list cols="4" rowHeight="250" gutterSize="10">
-    <mat-grid-tile *ngFor="let product of products">
-        <product-cell [product]="product"></product-cell>
-    </mat-grid-tile>
-</mat-grid-list>
+<div class="products-grid-container">
+    <div *ngIf="!anyItemsOnPage" class="grid-noitemslabel-container">
+        <h1>No items under this category on this page yet</h1>
+    </div>
+    <ul class="list">
+        <li *ngFor="let product of pageData.productItems">
+            <product-cell [product]="product" class="list-item"></product-cell>
+        </li>
+    </ul>
+    <div *ngIf="anyItemsOnPage" class="grid-footerpager-container">
+        <mat-paginator [length]="pageData.totalCount" [pageSize]="itemsPerPage" ></mat-paginator>
+    </div>
+</div>

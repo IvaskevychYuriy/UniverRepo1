@@ -1,0 +1,8 @@
+.new-product-container textarea{
+    min-height: 5em;
+    resize: vertical;
+}
+
+form mat-form-field {
+    width: 100%;
+}

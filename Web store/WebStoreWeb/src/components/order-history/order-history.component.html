@@ -1,0 +1,27 @@
+<div *ngIf="!anyOrder"class="orders-noitemslabel-container">
+    <h1>No orders yet</h1>
+</div>
+<div *ngIf="anyOrder">
+        <h2 style="text-align: center">Orders</h2>
+        <div class="example-container mat-elevation-z8">
+                <mat-table #table [dataSource]="dataSource">
+                  <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="state">
+                    <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.state.toString()}} </mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="price">
+                    <mat-header-cell *matHeaderCellDef> Total Price </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.totalPrice}} </mat-cell>
+                  </ng-container>
+              
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              </div>
+</div>

@@ -1,3 +1,41 @@
-mat-grid-tile{
-    border: 1px solid black;
+  ul, li {
+    flex: 1;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .list-item {
+    display: flex; 
+    height: 100%;
+    padding: 0.2em;
+    margin: 0.2em;
+    width: 18em;
+  }
+
+.products-grid-container .grid-noitemslabel-container {
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 5em;
 }
+  /* @media all and (min-width: 40em) {
+    .list-item {
+      width: 17em;
+    }
+  }
+  @media all and (min-width: 60em) {
+    .list-item {
+      width: 17em;
+    }
+  }
+  
+  @media all and (min-width: 100em) {
+    .list-item {
+      width: 25%;
+    }
+  } */
+  

@@ -10,15 +10,22 @@ import { AuthGuard } from '../guards/auth.guard';
 import { AlertService } from '../services/alert.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { HomeComponent } from '../components/home/home.component';
-import { SecretComponent } from '../components/secret/secret.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpOptionsInterceptor } from '../services/http-options.interceptor';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule, MatMenuModule, MatListModule, MatInputModule, MatCardModule, MatPaginatorModule, MatSelectModule, MatOptionModule, MatTableModule } from '@angular/material';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { ProductCellComponent } from '../components/product-grid/product-cell/product-cell.component';
 import { ProductGridComponent } from '../components/product-grid/product-grid.component';
+import { SidebarComponent } from '../components/sidebar/sidebar.component';
+import { ProductCategoriesService } from '../services/product-categories.service';
+import { AdminMenuComponent } from '../components/admin-menu/admin-menu.component';
+import { ProductItemsService } from '../services/product-items.service';
+import { ShoppingCartService } from '../services/shopping-cart.service';
+import { ShoppingCartComponent } from '../components/shopping-cart/shopping-cart.component';
+import { OrderService } from '../services/order.service';
+import { OrderHistoryComponent } from '../components/order-history/order-history.component';
 
 @NgModule({
   imports: [
@@ -28,24 +35,39 @@ import { ProductGridComponent } from '../components/product-grid/product-grid.co
     BrowserAnimationsModule,
     MatButtonModule,
     MatToolbarModule,
+    MatListModule,
     MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatCardModule,
     MatGridListModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatMenuModule,
     routing
 ],
 declarations: [
     AppComponent,
     AlertComponent,
     HomeComponent,
-    SecretComponent,
+    AdminMenuComponent,
     LoginComponent,
     NavbarComponent,
+    SidebarComponent,
     ProductCellComponent,
-    ProductGridComponent
+    ProductGridComponent,
+    OrderHistoryComponent,
+    ShoppingCartComponent
 ],
 providers: [
     AuthGuard,
     AlertService,
     AuthenticationService,
+    ProductCategoriesService,
+    ProductItemsService,
+    ShoppingCartService,
+    OrderService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpOptionsInterceptor, multi: true }
 ],
   bootstrap: [AppComponent]

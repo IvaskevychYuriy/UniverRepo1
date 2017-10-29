@@ -57,3 +57,12 @@ $(".tooltip").on({
        $(this).css({display: 'none'});
        },
 });
+
+
+var teachers = [];
+function addTeacher() {
+    var list = $("#teacher-list");
+    var item = {name: $("#teacher-name").val(), age: $("#teacher-age").val()};
+    teachers.push(item);
+    list.append($("<li>" + item.name + " - " + item.age + "</li>"));
+}

@@ -1,0 +1,56 @@
+<div class="container">
+    <h2 style="text-align:center; margin: 2em">Administration menu</h2>
+    <div class="new-category-container col-sm-6">
+        <h3>Add new category:</h3>
+        <form name="newCategoryForm" (ngSubmit)="categoryForm.form.valid && addNewCategory()" #categoryForm="ngForm" novalidate>
+                <mat-form-field>
+                    <label for="catName">Name</label>
+                    <input matInput type="text" class="form-control" name="catName" [(ngModel)]="newCategory.name" #catName="ngModel" required />
+                    <mat-error>Name is required</mat-error>
+                </mat-form-field>
+            <div class="form-group">
+                <button mat-icon-button>
+                    <span>Add</span>
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="new-product-container col-sm-6">
+        <h3>Add new product:</h3>
+        <form name="newProductForm" (ngSubmit)="productFrom.form.valid && addNewProduct()" #productFrom="ngForm" novalidate>
+                <mat-form-field>
+                    <mat-select placeholder="Category" [(ngModel)]="newProduct.categoryId" name="category" required>
+                      <mat-option *ngFor="let category of categories" [value]="category.id" >
+                        {{category.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error>Category is required</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <label for="name">Name</label>
+                    <input matInput type="text" class="form-control" name="name" [(ngModel)]="newProduct.name" #name="ngModel" required />
+                    <mat-error>Name is required</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <label for="picture">Picture url</label>
+                    <input matInput type="text" class="form-control" name="picture" [(ngModel)]="newProduct.pictureUrl" #picture="ngModel" />
+                </mat-form-field>
+                <mat-form-field>
+                    <label for="description">Description</label>
+                    <textarea matInput rows="3" class="form-control" name="description" [(ngModel)]="newProduct.description" #description="ngModel"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                    <label for="price">Price</label>
+                    <input matInput type="number" min="1" class="form-control" name="price" [(ngModel)]="newProduct.price" #price="ngModel" required/>
+                    <mat-error>Price is required</mat-error>
+                </mat-form-field>
+            <div class="form-group">
+                <button mat-icon-button>
+                    <span>Add</span>
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

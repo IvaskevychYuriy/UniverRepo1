@@ -1,0 +1,8 @@
+.general-container {
+    display: flex; 
+    flex-direction: row
+}
+
+.general-container > .router-container {
+    margin: 0 auto;
+}
