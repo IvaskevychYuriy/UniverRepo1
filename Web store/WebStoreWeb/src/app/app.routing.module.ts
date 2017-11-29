@@ -6,11 +6,13 @@ import { HomeComponent } from '../components/home/home.component';
 import { AdminMenuComponent } from '../components/admin-menu/admin-menu.component';
 import { ShoppingCartComponent } from '../components/shopping-cart/shopping-cart.component';
 import { OrderHistoryComponent } from '../components/order-history/order-history.component';
+import { UselessComponent } from '../components/useless/useless.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'cart', component: ShoppingCartComponent },
     { path: 'orders', component: OrderHistoryComponent },
+    { path: 'useless', component: UselessComponent },
     { path: 'administration', component: AdminMenuComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent, data: {is_register: false} },
     { path: 'register', component: LoginComponent, data: {is_register: true} },

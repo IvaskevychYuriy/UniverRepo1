@@ -1,0 +1,41 @@
+2017/09/15 22:57:25 [error] 8752#3088: *1 directory index of "E:\Study\Year3-Par1\Web-services\host/../../" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:12345"
+2017/09/15 22:57:29 [error] 8752#3088: *1 directory index of "E:\Study\Year3-Par1\Web-services\host/../../" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:12345"
+2017/09/15 22:57:39 [notice] 1912#2376: signal process started
+2017/09/15 22:57:42 [error] 12600#9644: *3 directory index of "E:\Study\Year3-Par1\Web-services\host/../../" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:12345"
+2017/09/15 22:58:22 [emerg] 13292#7436: invalid number of arguments in "root" directive in E:\Study\Year3-Par1\Web-services\host/conf/nginx.conf:26
+2017/09/15 22:58:31 [notice] 13152#5044: signal process started
+2017/09/15 22:58:36 [error] 1720#11228: *5 directory index of "E:\Study\Year3-Par1\Web-services\host/../../" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:12345"
+2017/09/15 22:59:00 [error] 1720#11228: *5 directory index of "E:\Study\Year3-Par1\Web-services\host/../../" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:12345"
+2017/09/15 23:00:12 [notice] 12336#9436: signal process started
+2017/09/15 23:00:15 [error] 9220#11376: *7 CreateFile() "E:\Study\Year3-Par1\Web-services\host/../../Links.html" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: , request: "GET /Links.html HTTP/1.1", host: "localhost:12345", referrer: "http://localhost:12345/Home.html"
+2017/09/15 23:00:19 [error] 9220#11376: *7 directory index of "E:\Study\Year3-Par1\Web-services\host/../../" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:12345"
+2017/09/15 23:00:22 [error] 9220#11376: *7 directory index of "E:\Study\Year3-Par1\Web-services\host/../../" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:12345"
+2017/09/15 23:01:03 [notice] 12220#2540: signal process started
+2017/09/15 23:06:41 [notice] 11708#12280: signal process started
+2017/09/15 23:06:42 [notice] 268#3376: signal process started
+2017/09/15 23:06:42 [error] 268#3376: CreateFile() "E:\Study\Year3-Par1\Web-services\host/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2017/09/15 23:06:46 [notice] 5044#7588: signal process started
+2017/09/15 23:06:46 [error] 5044#7588: CreateFile() "E:\Study\Year3-Par1\Web-services\host/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2017/09/18 08:44:44 [notice] 3464#3104: signal process started
+2017/09/18 08:45:05 [notice] 1864#7836: signal process started
+2017/09/18 08:45:26 [notice] 5148#3616: signal process started
+2017/09/18 08:45:26 [error] 5148#3616: CreateFile() "E:\Study\Year3-Par1\Web-services\host/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2017/09/18 08:46:09 [error] 3788#1768: *1 CreateFile() "E:\Study\Year3-Par1\Web-services\host/../favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: , request: "GET /favicon.ico HTTP/1.1", host: "localhost:12345", referrer: "http://localhost:12345/"
+2017/09/18 09:03:31 [notice] 12088#10744: signal process started
+2017/09/18 09:06:09 [notice] 11268#9052: signal process started
+2017/11/25 16:58:11 [emerg] 9852#5640: "upstream" directive is not allowed here in E:\Study\Year3-Par1\Web-services\Web store\host/conf/nginx.conf:16
+2017/11/25 16:59:09 [emerg] 15768#232: unexpected "}" in E:\Study\Year3-Par1\Web-services\Web store\host/conf/nginx.conf:27
+2017/11/25 17:31:01 [notice] 1380#18304: signal process started
+2017/11/25 17:55:27 [notice] 16028#17448: signal process started
+2017/11/25 17:57:36 [notice] 12828#17088: signal process started
+2017/11/25 17:57:45 [notice] 10300#8740: signal process started
+2017/11/25 17:57:49 [notice] 18168#15396: signal process started
+2017/11/25 17:57:49 [error] 18168#15396: CreateFile() "E:\Study\Year3-Par1\Web-services\Web store\host/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2017/11/25 18:07:22 [notice] 6576#10976: signal process started
+2017/11/25 18:10:16 [notice] 17628#13600: signal process started
+2017/11/25 20:55:43 [notice] 17204#14732: signal process started
+2017/11/25 21:57:14 [emerg] 1768#10768: invalid number of arguments in "hash" directive in E:\Study\Year3-Par1\Web-services\Web store\host/conf/nginx.conf:24
+2017/11/26 18:22:37 [notice] 13856#1440: signal process started
+2017/11/26 19:21:56 [notice] 17036#17060: signal process started
+2017/11/27 08:55:58 [emerg] 16300#16292: bind() to 0.0.0.0:50153 failed (10013: An attempt was made to access a socket in a way forbidden by its access permissions)
+2017/11/27 09:09:40 [notice] 15336#13636: signal process started
