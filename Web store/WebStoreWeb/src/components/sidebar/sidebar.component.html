@@ -1,5 +1,10 @@
-<mat-nav-list class="navbar-content-container">
-    <mat-list-item *ngFor="let category of categories" (click)="selectCategory(category)">
-        {{category.name}}
-    </mat-list-item>
-</mat-nav-list>
+<ul class="navbar-content-container">
+    <li *ngFor="let category of categories; let i = index">
+        <span (click)="selectCategory(category)">{{category.name}}</span>
+        <ul class="navbar-sub-content-container">
+            <li *ngFor="let subCategory of category.subCategories">
+                <span (click)="selectSubCategory(subCategory)">{{subCategory.name}}</span>
+            </li>
+        </ul>
+    </li>
+</ul>

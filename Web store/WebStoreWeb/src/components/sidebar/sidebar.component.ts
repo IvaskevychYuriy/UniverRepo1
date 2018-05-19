@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductCategoriesService } from '../../services/product-categories.service';
 import { ProductCategory } from '../../models/product-category';
+import { ProductSubCategory } from '../../models/product-sub-category';
 
 @Component({
     moduleId: module.id.toString(),
@@ -18,9 +19,8 @@ export class SidebarComponent implements OnInit{
         private categoriesService: ProductCategoriesService
     ) { }
     
-    ngOnInit(): void {
-        this.categoriesService.categories
-            .then(data => this.categories = data);
+    async ngOnInit() {
+        this.categories = await this.categoriesService.categories;
     }
 
     private selectCategory(category: ProductCategory): void {
@@ -29,5 +29,13 @@ export class SidebarComponent implements OnInit{
         }
 
         this.router.navigate(['/home'], { queryParams: { categoryId: category.id } });
+    }
+    
+    private selectSubCategory(subCategory: ProductSubCategory): void {
+        if (!subCategory || !subCategory.id) {
+            return;
+        }
+
+        this.router.navigate(['/home'], { queryParams: { subCategoryId: subCategory.id } });
     }
 }

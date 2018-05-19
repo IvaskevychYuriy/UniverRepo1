@@ -1,31 +1,57 @@
 <div class="container">
     <h2 style="text-align:center; margin: 2em">Administration menu</h2>
     <div class="new-category-container col-sm-6">
-        <h3>Add new category:</h3>
-        <form name="newCategoryForm" (ngSubmit)="categoryForm.form.valid && addNewCategory()" #categoryForm="ngForm" novalidate>
+        <div>
+            <h3>Add new category:</h3>
+            <form name="newCategoryForm" (ngSubmit)="categoryForm.form.valid && addNewCategory()" #categoryForm="ngForm" novalidate>
                 <mat-form-field>
                     <label for="catName">Name</label>
                     <input matInput type="text" class="form-control" name="catName" [(ngModel)]="newCategory.name" #catName="ngModel" required />
                     <mat-error>Name is required</mat-error>
                 </mat-form-field>
-            <div class="form-group">
-                <button mat-icon-button>
-                    <span>Add</span>
-                    <mat-icon>add</mat-icon>
-                </button>
-            </div>
-        </form>
+                <div class="form-group">
+                    <button mat-icon-button>
+                        <span>Add</span>
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div style="margin-top: 5em;">
+            <h3>Add new sub category:</h3>
+            <form name="newSubCategoryForm" (ngSubmit)="subCategoryForm.form.valid && addNewSubCategory()" #subCategoryForm="ngForm" novalidate>
+                <mat-form-field>
+                    <mat-select placeholder="Category" [(ngModel)]="newSubCategory.categoryId" name="category" required>
+                        <mat-option *ngFor="let category of categories" [value]="category.id">
+                            {{category.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Category is required</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <label for="subCatName">Name</label>
+                    <input matInput type="text" class="form-control" name="subCatName" [(ngModel)]="newSubCategory.name" #subCatName="ngModel" required />
+                    <mat-error>Name is required</mat-error>
+                </mat-form-field>
+                <div class="form-group">
+                    <button mat-icon-button>
+                        <span>Add</span>
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="new-product-container col-sm-6">
         <h3>Add new product:</h3>
         <form name="newProductForm" (ngSubmit)="productFrom.form.valid && addNewProduct()" #productFrom="ngForm" novalidate>
                 <mat-form-field>
-                    <mat-select placeholder="Category" [(ngModel)]="newProduct.categoryId" name="category" required>
-                      <mat-option *ngFor="let category of categories" [value]="category.id" >
+                    <mat-select placeholder="Sub Category" [(ngModel)]="newProduct.subCategoryId" name="category" required>
+                      <mat-option *ngFor="let category of subCategories" [value]="category.id" >
                         {{category.name}}
                       </mat-option>
                     </mat-select>
-                    <mat-error>Category is required</mat-error>
+                    <mat-error>Sub Category is required</mat-error>
                 </mat-form-field>
                 <mat-form-field>
                     <label for="name">Name</label>

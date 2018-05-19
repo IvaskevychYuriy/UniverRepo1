@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using WebStore.Api.Constants;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
 
@@ -16,15 +17,15 @@ namespace WebStore.Api.Extensions
                 var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<UserRole>>();
-                var adminRole = roleManager.FindByNameAsync("Administrator").Result;
+                var adminRole = roleManager.FindByNameAsync(RoleNames.AdminRoleName).Result;
                 if (adminRole == null)
                 {
-                    roleManager.CreateAsync(new UserRole("Administrator")).Wait();
+                    roleManager.CreateAsync(new UserRole(RoleNames.AdminRoleName)).Wait();
                 }
-                var userRole = roleManager.FindByNameAsync("User").Result;
+                var userRole = roleManager.FindByNameAsync(RoleNames.UserRoleName).Result;
                 if (userRole == null)
                 {
-                    roleManager.CreateAsync(new UserRole("User")).Wait();
+                    roleManager.CreateAsync(new UserRole(RoleNames.UserRoleName)).Wait();
                 }
 
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -39,7 +40,7 @@ namespace WebStore.Api.Extensions
                     };
 
                     userManager.CreateAsync(admin, "admin").Wait();
-                    userManager.AddToRolesAsync(admin, new[] { "User", "Administrator" }).Wait();
+                    userManager.AddToRolesAsync(admin, new[] { RoleNames.UserRoleName, RoleNames.AdminRoleName }).Wait();
                 }
 
                 db.SaveChanges();

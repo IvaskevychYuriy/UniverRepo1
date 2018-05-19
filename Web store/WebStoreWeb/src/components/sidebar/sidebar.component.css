@@ -1,3 +1,32 @@
 .navbar-content-container {
     min-width: 7em;
+    font-size: 1.5em;
+}
+
+.navbar-content-container > li {
+    margin: 0.3em auto;
+    cursor: pointer;
+}
+
+.navbar-sub-content-container {
+    font-size: 0.8em;
+}
+
+.navbar-sub-content-container > li {
+    margin: 0.2em auto;
+    cursor: pointer;
+}
+
+.navbar-content-container, .navbar-sub-content-container {
+    list-style: none;
+    padding-left: 0;
+}
+
+.navbar-content-container > li, .navbar-sub-content-container > li {
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+}
+
+.navbar-content-container > li:hover, .navbar-sub-content-container > li:hover {
+    background-color: rgba(0,0,0,.12);
 }

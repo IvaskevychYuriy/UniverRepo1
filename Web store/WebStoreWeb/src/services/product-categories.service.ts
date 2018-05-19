@@ -2,6 +2,7 @@ import 'rxjs/add/operator/toPromise';
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ProductCategory } from '../models/product-category';
+import { ProductSubCategory } from '../models/product-sub-category';
 
 @Injectable()
 export class ProductCategoriesService {
@@ -9,20 +10,26 @@ export class ProductCategoriesService {
     }
 
     get categories(): Promise<ProductCategory[]> {
-        return this.http.get('ProductCategories')
-            .toPromise()
-            .then(data => data as ProductCategory[]);
+        return this.http.get<ProductCategory[]>('ProductCategories').toPromise();
+    }
+    
+    get subCategories(): Promise<ProductSubCategory[]> {
+        return this.http.get<ProductSubCategory[]>('ProductCategories/sub').toPromise();
     }
 
-    public getCategory(id: number): Promise<ProductCategory> {
-        return this.http.get(`ProductCategories/${id}`)
-            .toPromise()
-            .then(data => data as ProductCategory);
+    public async getCategory(id: number): Promise<ProductCategory> {
+        return await this.http.get<ProductCategory>(`ProductCategories/${id}`).toPromise();
+    }
+    
+    public async getSubCategory(id: number): Promise<ProductSubCategory> {
+        return await this.http.get<ProductSubCategory>(`ProductCategories/sub/${id}`).toPromise();
     }
 
-    public add(category: ProductCategory): Promise<ProductCategory> {
-        return this.http.post(`ProductCategories`, JSON.stringify(category))
-            .toPromise()
-            .then(data => data as ProductCategory);
+    public async add(category: ProductCategory) {
+        await this.http.post<void>(`ProductCategories`, category).toPromise();
+    }
+
+    public async addSub(subCategory: ProductSubCategory) {
+        await this.http.post(`ProductCategories/sub`, subCategory).toPromise();
     }
 }

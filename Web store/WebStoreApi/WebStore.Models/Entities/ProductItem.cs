@@ -4,14 +4,19 @@ namespace WebStore.Models.Entities
 {
     public class ProductItem : EntityBase<int>
     {
+        public ProductItem()
+        {
+            CartItems = new HashSet<CartItem>();
+        }
+
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string PictureUrl { get; set; }
         public string Description { get; set; }
         
-        public int CategoryId { get; set; }
-        public ProductCategory Category { get; set; }
+        public int SubCategoryId { get; set; }
+        public virtual ProductSubCategory SubCategory { get; set; }
 
-        public List<CartItem> CartItems { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
     }
 }

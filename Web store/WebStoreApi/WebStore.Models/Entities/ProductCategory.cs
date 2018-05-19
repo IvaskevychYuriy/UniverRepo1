@@ -4,8 +4,13 @@ namespace WebStore.Models.Entities
 {
     public class ProductCategory : EntityBase<int>
     {
+        public ProductCategory()
+        {
+            SubCategories = new HashSet<ProductSubCategory>();
+        }
+
         public string Name { get; set; }
 
-        public List<ProductItem> Products { get; set; }
+        public ICollection<ProductSubCategory> SubCategories { get; set; }
     }
 }

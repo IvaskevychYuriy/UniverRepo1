@@ -7,9 +7,11 @@ namespace WebStore.DAL.Contexts
     public class ApplicationDbContext : IdentityDbContext<User, UserRole, int>
     {
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductSubCategory> ProductSubCategories { get; set; }
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderHistory> OrderHistories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -19,15 +21,20 @@ namespace WebStore.DAL.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
 
             builder.Entity<ProductCategory>(b =>
             {
                 b.ToTable("ProductCategory");
                 b.HasKey(pc => pc.Id);
                 b.Property(pc => pc.Name).IsRequired().HasMaxLength(50);
+            });
+
+            builder.Entity<ProductSubCategory>(b =>
+            {
+                b.ToTable("ProductSubCategory");
+                b.HasKey(psc => psc.Id);
+                b.Property(psc => psc.Name).IsRequired().HasMaxLength(50);
+                b.HasOne(psc => psc.Category).WithMany(pc => pc.SubCategories).HasForeignKey(psc => psc.CategoryId);
             });
 
             builder.Entity<ProductItem>(b =>
@@ -38,7 +45,7 @@ namespace WebStore.DAL.Contexts
                 b.Property(pi => pi.Price).IsRequired();
                 b.Property(pi => pi.Description).IsRequired(false);
                 b.Property(pi => pi.PictureUrl).IsRequired(false).HasMaxLength(2000);
-                b.HasOne(pi => pi.Category).WithMany(pc => pc.Products).HasForeignKey(pi => pi.CategoryId);
+                b.HasOne(pi => pi.SubCategory).WithMany(psc => psc.Products).HasForeignKey(pi => pi.SubCategoryId);
             });
 
             builder.Entity<CartItem>(b =>
@@ -54,9 +61,17 @@ namespace WebStore.DAL.Contexts
             {
                 b.ToTable("Order");
                 b.HasKey(pi => pi.Id);
-                b.Property(pi => pi.State).IsRequired();
                 b.Property(pi => pi.TotalPrice).IsRequired();
                 b.HasOne(pi => pi.User).WithMany(pc => pc.Orders).HasForeignKey(pi => pi.UserId);
+            });
+
+            builder.Entity<OrderHistory>(b =>
+            {
+                b.ToTable("OrderHistory");
+                b.HasKey(oh => oh.Id);
+                b.Property(oh => oh.State).IsRequired();
+                b.Property(oh => oh.StateChangeDate).IsRequired().HasDefaultValueSql("GETDATE()");
+                b.HasOne(oh => oh.Order).WithMany(o => o.HistoryRecords).HasForeignKey(oh => oh.OrderId);
             });
         }
     }

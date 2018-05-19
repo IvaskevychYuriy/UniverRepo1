@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.Api.Constants;
 using WebStore.Api.DataTransferObjects;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
@@ -28,12 +29,16 @@ namespace WebStore.Api.Controllers
         // GET: /ProductItems/Get?categoryId=
         [AllowAnonymous]
         [HttpGet("Get")]
-        public async Task<IActionResult> Get(int? categoryId = null, int? pageSize = null, int page = 1)
+        public async Task<IActionResult> Get(int? categoryId = null, int? subCategoryId = null, int? pageSize = null, int page = 1)
         {
             var result = _dbContext.ProductItems.AsQueryable();
-            if (categoryId != null)
+            if (subCategoryId != null)
             {
-                result = result.Where(pi => pi.CategoryId == categoryId);
+                result = result.Where(pi => pi.SubCategoryId == subCategoryId);
+            }
+            else if (categoryId != null)
+            {
+                result = result.Where(pi => pi.SubCategory.CategoryId == categoryId);
             }
             int count = result.Count();
 
@@ -48,7 +53,7 @@ namespace WebStore.Api.Controllers
 
             return Ok(new PageDataDTO()
             {
-                ProductItems = _mapper.Map<List<ProductItemDTO>>(await result.ToListAsync()),
+                ProductItems = await result.ProjectTo<ProductItemDTO>(_mapper.ConfigurationProvider).ToListAsync(),
                 TotalCount = count
             });
         }
@@ -68,8 +73,8 @@ namespace WebStore.Api.Controllers
         }
 
         // POST: /ProductItems/
-        [Authorize(Roles = "Administrator")]
-        [HttpPost("")]
+        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductItemDTO productItem)
         {
             if (!ModelState.IsValid)
@@ -78,7 +83,7 @@ namespace WebStore.Api.Controllers
             }
 
             var category = _mapper.Map<ProductItem>(productItem);
-            var r = await _dbContext.ProductItems.AddAsync(category);
+            await _dbContext.ProductItems.AddAsync(category);
             await _dbContext.SaveChangesAsync();
 
             return Ok(_mapper.Map<ProductItemDTO>(category));

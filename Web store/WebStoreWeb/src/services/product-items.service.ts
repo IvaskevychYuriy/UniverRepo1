@@ -9,21 +9,15 @@ export class ProductItemsService {
     constructor(private http: HttpClient) { 
     }
 
-    public fetchItems(categoryId: number = null, pageSize: number = null, page: number = null): Promise<PageData> {
-        return this.http.get(`ProductItems/Get?categoryId=${categoryId}&pageSize=${pageSize}&page=${page}`)
-            .toPromise()
-            .then(data => data as PageData);
+    public async fetchItems(categoryId: number = null, subCategoryId: number = null, pageSize: number = null, page: number = null): Promise<PageData> {
+        return await this.http.get<PageData>(`ProductItems/Get?categoryId=${categoryId}&subCategoryId=${subCategoryId}&pageSize=${pageSize}&page=${page}`).toPromise();
     }
 
-    public getItem(id: number): Promise<ProductItem> {
-        return this.http.get(`ProductItems/${id}`)
-            .toPromise()
-            .then(data => data as ProductItem);
+    public async getItem(id: number): Promise<ProductItem> {
+        return await this.http.get<ProductItem>(`ProductItems/${id}`).toPromise();
     }
 
-    public add(item: ProductItem): Promise<ProductItem> {
-        return this.http.post(`ProductItems`, JSON.stringify(item))
-            .toPromise()
-            .then(data => data as ProductItem);
+    public async add(item: ProductItem): Promise<ProductItem> {
+        return await this.http.post<ProductItem>(`ProductItems`, item).toPromise();
     }
 }

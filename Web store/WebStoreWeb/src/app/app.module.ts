@@ -26,8 +26,6 @@ import { ShoppingCartService } from '../services/shopping-cart.service';
 import { ShoppingCartComponent } from '../components/shopping-cart/shopping-cart.component';
 import { OrderService } from '../services/order.service';
 import { OrderHistoryComponent } from '../components/order-history/order-history.component';
-import { UselessComponent } from '../components/useless/useless.component';
-import { UselessTasksService } from '../services/useless-tasks.service';
 
 @NgModule({
   imports: [
@@ -60,8 +58,7 @@ declarations: [
     ProductCellComponent,
     ProductGridComponent,
     OrderHistoryComponent,
-    ShoppingCartComponent,
-    UselessComponent
+    ShoppingCartComponent
 ],
 providers: [
     AuthGuard,
@@ -71,7 +68,6 @@ providers: [
     ProductItemsService,
     ShoppingCartService,
     OrderService,
-    UselessTasksService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpOptionsInterceptor, multi: true }
 ],
   bootstrap: [AppComponent]

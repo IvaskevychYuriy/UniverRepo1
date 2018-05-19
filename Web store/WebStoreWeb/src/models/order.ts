@@ -1,10 +1,11 @@
 import { CartItem } from "./cart-item";
-import { ProductItem } from "./product-item";
 import { OrderStates } from "./enumerations/order-states";
+import { OrderHistory } from "./order-history";
 
 export class Order {
-    id: number;
-    cartItems: CartItem[];
-    state: OrderStates;
-    totalPrice: number;
+    public id: number;
+    public totalPrice: number;
+
+    public cartItems: CartItem[];
+    public historyRecords: OrderHistory[];
 }

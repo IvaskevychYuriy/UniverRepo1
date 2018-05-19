@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebStore.Models.Entities;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 using WebStore.Api.DataTransferObjects;
-using Microsoft.AspNetCore.Http;
+using WebStore.Models.Entities;
 
 namespace WebStore.Api.Controllers
 {

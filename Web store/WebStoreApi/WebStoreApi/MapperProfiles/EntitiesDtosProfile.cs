@@ -12,6 +12,10 @@ namespace WebStore.Api.MapperProfiles
             CreateMap<ProductCategory, ProductCategoryDTO>();
             CreateMap<ProductCategoryDTO, ProductCategory>();
 
+            // ProductSubCategory
+            CreateMap<ProductSubCategory, ProductSubCategoryDTO>();
+            CreateMap<ProductSubCategoryDTO, ProductSubCategory>();
+
             // ProductItem
             CreateMap<ProductItem, ProductItemDTO>();
             CreateMap<ProductItemDTO, ProductItem>();
@@ -23,6 +27,10 @@ namespace WebStore.Api.MapperProfiles
             // Order
             CreateMap<Order, OrderDTO>();
             CreateMap<OrderDTO, Order>();
+
+            // OrderHistory
+            CreateMap<OrderHistory, OrderHistoryDTO>();
+            CreateMap<OrderHistoryDTO, OrderHistory>();
         }
     }
 }

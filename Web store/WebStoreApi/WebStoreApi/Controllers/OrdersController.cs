@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Api.DataTransferObjects;
+using WebStore.Api.Extensions;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
 using WebStore.Models.Enumerations;
@@ -18,38 +17,27 @@ namespace WebStore.Api.Controllers
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
         public OrdersController(
             ApplicationDbContext dbContext,
-            UserManager<User> userManager,
             IMapper mapper)
         {
             _dbContext = dbContext;
-            _userManager = userManager;
             _mapper = mapper;
         }
 
         // GET: /Orders/
         [Authorize]
-        [HttpGet("")]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
-            int id = await GetCurrentUserIdAsync();
-            var orders = _dbContext.Orders.Where(o => o.UserId == id).ToList();
-            return Ok(_mapper.Map<List<OrderDTO>>(orders));
-        }
+            var orders = _dbContext.Orders
+                .AsNoTracking()
+                .Where(o => o.UserId == User.GetId())
+                .ProjectTo<OrderDTO>(_mapper.ConfigurationProvider);
 
-        private async Task<int> GetCurrentUserIdAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new Exception("No user found");
-            }
-
-            return user.Id;
+            return Ok(orders);
         }
 
         // GET: /Orders/{id}
@@ -57,8 +45,7 @@ namespace WebStore.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            int userId = await GetCurrentUserIdAsync();
-            var result = await _dbContext.Orders.FirstOrDefaultAsync(pc => pc.Id == id);
+            var result = await _dbContext.Orders.FirstOrDefaultAsync(pc => pc.Id == User.GetId());
             if (result == null)
             {
                 return BadRequest($"No such order id = '{id}'");
@@ -69,7 +56,7 @@ namespace WebStore.Api.Controllers
 
         // POST: /Orders/
         [Authorize]
-        [HttpPost("")]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] OrderDTO orderDto)
         {
             if (!ModelState.IsValid)
@@ -79,10 +66,13 @@ namespace WebStore.Api.Controllers
 
             var order = _mapper.Map<Order>(orderDto);
             await FillOrderAsync(order);
-            order.State = OrderStates.New;
-            order.UserId = await GetCurrentUserIdAsync();
+            order.UserId = User.GetId();
+            order.HistoryRecords.Add(new OrderHistory()
+            {
+                State = OrderStates.New
+            });
 
-            var r = await _dbContext.Orders.AddAsync(order);
+            await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
 
             return Ok(_mapper.Map<OrderDTO>(order));

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using WebStore.Models.Enumerations;
 
 namespace WebStore.Api.DataTransferObjects
 {
@@ -7,8 +6,8 @@ namespace WebStore.Api.DataTransferObjects
     {
         public int Id { get; set; }
         public decimal TotalPrice { get; set; }
-        public OrderStates State { get; set; }
 
         public List<CartItemDTO> CartItems { get; set; }
+        public List<OrderHistoryDTO> HistoryRecords { get; set; }
     }
 }
