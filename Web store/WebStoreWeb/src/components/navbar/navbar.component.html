@@ -1,6 +1,19 @@
 <mat-toolbar color="primary" role="header">
     <div *ngIf="this.authService.userProfile && this.authService.userProfile.isAdministrator">
-        <button mat-button (click)="openAdminMenu()">Admin menu</button>
+        <button mat-icon-button [matMenuTriggerFor]="adminMenu" class="menu-btn-trigger">
+            <mat-icon>more_vert</mat-icon>
+            <span>Admin Menu</span>
+        </button>
+        <mat-menu #adminMenu="matMenu">
+            <button mat-menu-item (click)="openProductsMenu()">
+                <mat-icon>menu</mat-icon>
+                <span>Products</span>
+            </button>
+            <button mat-menu-item (click)="openStoragesMenu()">
+                <mat-icon>storage</mat-icon>
+                <span>Storages</span>
+            </button>
+        </mat-menu>
     </div>
     <span class="example-spacer"></span>
     <span class="example-spacer"></span>
@@ -11,20 +24,20 @@
     <span class="example-spacer"></span>
     <div *ngIf="userName">
         <span class="nav-welcome-msg">Welcome, {{userName}}</span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" style="margin-right: 3em">
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn-trigger">
             <mat-icon>more_vert</mat-icon>
             <span>Menu</span>
         </button>
-          <mat-menu #menu="matMenu">
+        <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="openOrderHistory()">
-              <mat-icon>dialpad</mat-icon>
-              <span>Order History</span>
+                <mat-icon>dialpad</mat-icon>
+                <span>Order History</span>
             </button>
-            <button mat-menu-item class="btn-logout" (click)="logout()">
-              <mat-icon>input</mat-icon>
-              <span>Logout</span>
+            <button mat-menu-item class="btn-logout" (click)="test.close(); logout()">
+                <mat-icon>input</mat-icon>
+                <span>Logout</span>
             </button>
-          </mat-menu>
+        </mat-menu>
     </div>
     <div *ngIf="!userName">
         <button mat-button (click)="login()">Login</button>

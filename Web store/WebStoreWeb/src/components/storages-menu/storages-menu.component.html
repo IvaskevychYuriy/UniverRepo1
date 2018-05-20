@@ -1,0 +1,102 @@
+<div class="container" [ngClass]="(selectedStorage.items && selectedStorage.items.length) ? 'force-full-width' : ''">
+  <h2 style="text-align: center">Storages menu</h2>
+  <div class="col-sm-4" style="display: flex; flex-direction: column;">
+    <div class="col-sm-12" *ngIf="(storages && storages.length)">
+      <mat-form-field>
+        <mat-select placeholder="Select storage" [(ngModel)]="selectedStorage.id" name="storage">
+          <mat-option *ngFor="let storage of storages" [value]="storage.id" (click)="loadStorage(storage)">
+            {{storage.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12">
+      <div>
+        <h3>Add new Storage:</h3>
+        <form name="newStorageForm" (ngSubmit)="storageForm.form.valid && addNewStorage()" #storageForm="ngForm" novalidate>
+          <mat-form-field>
+            <label for="storageName">Name</label>
+            <input matInput type="text" class="form-control" name="storageName" [(ngModel)]="newStorage.name" #storageName="ngModel"
+              required/>
+            <mat-error>Name is required</mat-error>
+          </mat-form-field>
+          <div class="form-group">
+            <button mat-icon-button>
+              <span>Add</span>
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div>
+        <h3>Add new Item:</h3>
+        <h5 *ngIf="!(selectedStorage && selectedStorage.id)" style="color: crimson">Select a storage first</h5>
+        <form *ngIf="selectedStorage && selectedStorage.id" name="newStorageItemForm" (ngSubmit)="storageItemForm.form.valid && addNewStorageItem()"
+          #storageItemForm="ngForm" novalidate>
+          <mat-form-field>
+            <mat-select placeholder="Select product" [(ngModel)]="newStorageItem.productId" name="productId">
+              <mat-option *ngFor="let product of products" [value]="product.id">
+                {{product.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <label for="price">Price</label>
+            <input matInput type="number" min="1" class="form-control" name="price" [(ngModel)]="newStorageItem.price" #price="ngModel"
+              required/>
+            <mat-error>Price is required</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <label for="quantity">Quantity</label>
+            <input matInput type="number" min="1" class="form-control" name="quantity" [(ngModel)]="newStorageItem.quantity" #quantity="ngModel"
+              required/>
+            <mat-error>Quantity is required</mat-error>
+          </mat-form-field>
+          <div class="form-group">
+            <button mat-icon-button>
+              <span>Add</span>
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-8" style="display: flex; flex-direction: column;">
+    <div *ngIf="selectedStorage.items && selectedStorage.items.length; then selectedStorageTemplate else noStorageTemplate">
+    </div>
+  </div>
+</div>
+
+<ng-template #selectedStorageTemplate>
+  <h3 style="text-align: center">Items in storage</h3>
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Product </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.productName}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.price}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.quantity}} </mat-cell>
+      </ng-container>
+    </mat-table>
+  </div>
+</ng-template>
+
+<ng-template #noStorageTemplate>
+  <div class="col-sm-12">
+    <h3 class="noitemslabel-container">No Items</h3>
+  </div>
+</ng-template>

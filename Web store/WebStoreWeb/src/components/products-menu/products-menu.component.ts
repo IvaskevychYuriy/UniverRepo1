@@ -9,11 +9,11 @@ import { ProductSubCategory } from '../../models/product-sub-category';
 
 @Component({
     moduleId: module.id.toString(),
-    selector: 'admin-menu',
-    templateUrl: 'admin-menu.component.html',
-    styleUrls: ['admin-menu.component.css']
+    selector: 'products-menu',
+    templateUrl: 'products-menu.component.html',
+    styleUrls: ['products-menu.component.css']
 })
-export class AdminMenuComponent implements OnInit {
+export class ProductsMenuComponent implements OnInit {
     private newProduct: ProductItem;
     private newCategory: ProductCategory;
     private newSubCategory: ProductSubCategory;

@@ -1,0 +1,10 @@
+export class StorageItem {
+    public id: number;
+    public price: number;
+    public quantity: number;
+
+    public storageId: number;
+
+    public productId: number;
+    public productName: string;
+}

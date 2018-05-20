@@ -10,6 +10,8 @@ namespace WebStore.Api.DataTransferObjects
         public string PictureUrl { get; set; }
         public string Description { get; set; }
 
+        public int AvailableCount { get; set; }
+
         public int SubCategoryId { get; set; }
     }
 }

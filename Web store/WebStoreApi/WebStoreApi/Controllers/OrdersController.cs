@@ -35,6 +35,7 @@ namespace WebStore.Api.Controllers
             var orders = _dbContext.Orders
                 .AsNoTracking()
                 .Where(o => o.UserId == User.GetId())
+                .OrderByDescending(o => o.Id)
                 .ProjectTo<OrderDTO>(_mapper.ConfigurationProvider);
 
             return Ok(orders);

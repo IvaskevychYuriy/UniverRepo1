@@ -20,12 +20,14 @@ import { ProductCellComponent } from '../components/product-grid/product-cell/pr
 import { ProductGridComponent } from '../components/product-grid/product-grid.component';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { ProductCategoriesService } from '../services/product-categories.service';
-import { AdminMenuComponent } from '../components/admin-menu/admin-menu.component';
+import { ProductsMenuComponent } from '../components/products-menu/products-menu.component';
 import { ProductItemsService } from '../services/product-items.service';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { ShoppingCartComponent } from '../components/shopping-cart/shopping-cart.component';
 import { OrderService } from '../services/order.service';
 import { OrderHistoryComponent } from '../components/order-history/order-history.component';
+import { StoragesMenuComponent } from '../components/storages-menu/storages-menu.component';
+import { StoragesService } from '../services/storages.service';
 
 @NgModule({
   imports: [
@@ -51,14 +53,15 @@ declarations: [
     AppComponent,
     AlertComponent,
     HomeComponent,
-    AdminMenuComponent,
+    ProductsMenuComponent,
     LoginComponent,
     NavbarComponent,
     SidebarComponent,
     ProductCellComponent,
     ProductGridComponent,
     OrderHistoryComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    StoragesMenuComponent
 ],
 providers: [
     AuthGuard,
@@ -68,6 +71,7 @@ providers: [
     ProductItemsService,
     ShoppingCartService,
     OrderService,
+    StoragesService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpOptionsInterceptor, multi: true }
 ],
   bootstrap: [AppComponent]

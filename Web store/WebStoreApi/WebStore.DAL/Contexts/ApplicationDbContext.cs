@@ -12,6 +12,8 @@ namespace WebStore.DAL.Contexts
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderHistory> OrderHistories { get; set; }
+        public DbSet<Storage> Storages { get; set; }
+        public DbSet<StorageItem> StorageItems { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -72,6 +74,23 @@ namespace WebStore.DAL.Contexts
                 b.Property(oh => oh.State).IsRequired();
                 b.Property(oh => oh.StateChangeDate).IsRequired().HasDefaultValueSql("GETDATE()");
                 b.HasOne(oh => oh.Order).WithMany(o => o.HistoryRecords).HasForeignKey(oh => oh.OrderId);
+            });
+
+            builder.Entity<Storage>(b =>
+            {
+                b.ToTable("Storage");
+                b.HasKey(e => e.Id);
+                b.Property(e => e.Name).IsRequired().HasMaxLength(255);
+            });
+
+            builder.Entity<StorageItem>(b =>
+            {
+                b.ToTable("StorageItem");
+                b.HasKey(e => e.Id);
+                b.Property(e => e.Price).IsRequired();
+                b.Property(e => e.Quantity).IsRequired();
+                b.HasOne(e => e.ProductItem).WithMany(o => o.StorageItems).HasForeignKey(e => e.ProductId);
+                b.HasOne(e => e.Storage).WithMany(o => o.Items).HasForeignKey(e => e.StorageId);
             });
         }
     }

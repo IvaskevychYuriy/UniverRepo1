@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewChildren } from '@angular/core';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
+import { MatMenu, MatMenuTrigger } from '@angular/material';
 
 @Component({
     moduleId: module.id.toString(),
@@ -10,6 +11,8 @@ import { Router } from '@angular/router';
     styleUrls: ['navbar.component.css']
 })
 export class NavbarComponent {
+    @ViewChildren(MatMenuTrigger) triggers: MatMenuTrigger[];
+    
     constructor(
         private authService: AuthenticationService,
         private router: Router
@@ -35,8 +38,14 @@ export class NavbarComponent {
         this.router.navigate(['/register']);
     }
 
-    openAdminMenu() {
-        this.router.navigate(['/administration']);
+    openProductsMenu() {
+        this.closeMenus();
+        this.router.navigate(['/products']);
+    }
+    
+    openStoragesMenu() {
+        this.closeMenus();
+        this.router.navigate(['/storages']);
     }
 
     openShoppingCart() {
@@ -44,6 +53,11 @@ export class NavbarComponent {
     }
 
     openOrderHistory() {
+        this.closeMenus();
         this.router.navigate(['/orders']);
+    }
+
+    private closeMenus() {
+        this.triggers.forEach(t => t.closeMenu());
     }
 }

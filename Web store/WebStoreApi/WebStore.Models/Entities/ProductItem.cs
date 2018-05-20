@@ -7,6 +7,7 @@ namespace WebStore.Models.Entities
         public ProductItem()
         {
             CartItems = new HashSet<CartItem>();
+            StorageItems = new HashSet<StorageItem>();
         }
 
         public string Name { get; set; }
@@ -18,5 +19,7 @@ namespace WebStore.Models.Entities
         public virtual ProductSubCategory SubCategory { get; set; }
 
         public ICollection<CartItem> CartItems { get; set; }
+
+        public ICollection<StorageItem> StorageItems { get; set; }
     }
 }

@@ -1,0 +1,24 @@
+form mat-form-field {
+    width: 100%;
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 60em;
+}
+  
+.mat-table {
+    overflow: auto;
+    max-height: 70em;
+}
+
+.noitemslabel-container {
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    opacity: 0.5;
+    text-align: center;
+}
+
+.force-full-width {
+    width: 100% !important;
+}

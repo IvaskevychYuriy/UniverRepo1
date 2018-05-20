@@ -5,23 +5,28 @@
   <h2 style="text-align: center">Orders</h2>
   <div class="example-container mat-elevation-z8">
     <mat-table #table [dataSource]="dataSource">
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
       </ng-container>
-
-      <ng-container matColumnDef="state">
-        <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.historyRecords[element.historyRecords.length - 1].state}} </mat-cell>
-      </ng-container>
-
+      
       <ng-container matColumnDef="price">
         <mat-header-cell *matHeaderCellDef> Total Price </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.totalPrice}} </mat-cell>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <ng-container matColumnDef="state">
+        <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{state(element)}} </mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="lastChange">
+        <mat-header-cell *matHeaderCellDef> Last Change </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{lastChange(element)}} </mat-cell>
+      </ng-container>
     </mat-table>
   </div>
 </div>

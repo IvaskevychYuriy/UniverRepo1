@@ -3,6 +3,7 @@ import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
+import { OrderStates } from '../../models/enumerations/order-states';
 
 @Component({
     moduleId: module.id.toString(),
@@ -16,22 +17,29 @@ export class OrderHistoryComponent implements OnInit {
     private displayedColumns: string[];
 
     constructor(
-        private orderService: OrderService
-    ) { 
-        this.displayedColumns = ["name", "state", "price"];
+        private orderService: OrderService) { 
+
+        this.displayedColumns = ["name", "price", "state", "lastChange"];
     }
     
-    ngOnInit(): void {
-        this.orderService.getAllOrders()
-            .then(result => 
-            {
-                this.orders = result;
-                this.dataSource = new OrdersDataSource(this.orders);
-            })
+    async ngOnInit() {
+        const result = await this.orderService.getAllOrders();
+        this.orders = result;
+        this.dataSource = new OrdersDataSource(this.orders);
     }
 
     get anyOrder(): boolean {
         return this.orders && this.orders.length > 0;
+    }
+
+    state(element: Order): string {
+        const state = element.historyRecords[element.historyRecords.length - 1].state;
+        return OrderStates[state];
+    }
+    
+    lastChange(element: Order): string {
+        const date = new Date(element.historyRecords[element.historyRecords.length - 1].stateChangeDate);
+        return date.toLocaleString();
     }
 }
 
