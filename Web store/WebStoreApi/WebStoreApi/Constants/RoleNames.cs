@@ -2,7 +2,8 @@
 {
     public class RoleNames
     {
-        public const string UserRoleName = "User";
-        public const string AdminRoleName = "Administrator";
+        public const string User = "User";
+        public const string Admin = "Administrator";
+        public const string Owner = "Owner";
     }
 }

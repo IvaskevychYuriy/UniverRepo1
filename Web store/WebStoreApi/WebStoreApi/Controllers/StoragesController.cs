@@ -29,7 +29,7 @@ namespace WebStore.Api.Controllers
         }
 
         // GET: api/<controller>
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -41,7 +41,7 @@ namespace WebStore.Api.Controllers
         }
 
         // GET api/<controller>/5
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -75,7 +75,7 @@ namespace WebStore.Api.Controllers
         }
 
         // POST api/<controller>
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]StorageListItemDTO value)
         {
@@ -86,7 +86,7 @@ namespace WebStore.Api.Controllers
         }
 
         // POST api/<controller>/item
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpPost("item")]
         public async Task<IActionResult> PostItem([FromBody]StorageItemDTO value)
         {
@@ -103,7 +103,7 @@ namespace WebStore.Api.Controllers
         }
 
         // DELETE api/<controller>/5
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -119,7 +119,7 @@ namespace WebStore.Api.Controllers
         }
 
         // DELETE api/<controller>/item/5
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpDelete("item/{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {

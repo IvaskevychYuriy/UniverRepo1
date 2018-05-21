@@ -73,7 +73,7 @@ namespace WebStore.Api.Controllers
         }
 
         // POST: /ProductItems/
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductItemDTO productItem)
         {

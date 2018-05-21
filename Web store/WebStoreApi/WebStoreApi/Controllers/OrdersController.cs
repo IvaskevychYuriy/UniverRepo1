@@ -71,21 +71,23 @@ namespace WebStore.Api.Controllers
             var ids = orderDto.CartItems.Select(ci => ci.Product.Id).ToList();
             var items = await _dbContext.ProductItems
                 .Where(pi => ids.Contains(pi.Id))
-                .OrderBy(pi => pi.Id)
                 .Select(pi => new
                 {
-                    Price = pi.Price,
-                    StorageItems = pi.StorageItems
-                        .Where(si => si.State == StorageItemState.Available)
-                        .OrderBy(si => si.Price)
-                        .ToList()
+                    Price = pi.Price
                 })
                 .ToListAsync();
+
+            var storageItems = _dbContext.StorageItems
+                .Where(si => ids.Contains(si.ProductId) && si.State == StorageItemState.Available)
+                .GroupBy(si => si.ProductId)
+                .OrderBy(g => g.Key)
+                .ToList();
 
             decimal totalPrice = 0;
             for (int i = 0; i < ids.Count; ++i)
             {
-                if (items[i].StorageItems.Count < orderDto.CartItems[i].Quantity)
+                var sItems = storageItems[i].ToList();
+                if (sItems.Count < orderDto.CartItems[i].Quantity)
                 {
                     return BadRequest();
                 }
@@ -94,11 +96,14 @@ namespace WebStore.Api.Controllers
 
                 for (int c = 0; c < orderDto.CartItems[i].Quantity; ++c)
                 {
-                    order.CartItems.Add(new CartItem()
+                    sItems[c].State = StorageItemState.Ordered;
+                    sItems[c].CartItem = new CartItem()
                     {
                         ProductId = ids[i],
-                        StorageItem = items[i].StorageItems[c]
-                    });
+                        ProductPrice = items[i].Price
+                    };
+
+                    order.CartItems.Add(sItems[c].CartItem);
                 }
             }
 

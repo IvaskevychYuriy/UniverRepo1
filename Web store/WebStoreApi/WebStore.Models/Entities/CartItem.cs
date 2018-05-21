@@ -2,6 +2,8 @@
 {
     public class CartItem : EntityBase<int>
     {
+        public decimal ProductPrice { get; set; }
+
         public int ProductId { get; set; }
         public virtual ProductItem Product { get; set; }
         

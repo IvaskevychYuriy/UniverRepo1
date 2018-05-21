@@ -1,0 +1,55 @@
+<div class="container">
+  <div *ngIf="!isLoading; then totalStatistics else loading">
+  </div>
+  <hr style="margin-top: 3em"/>
+  <div *ngIf="!isLoading; then itemsStatistics else loading">
+  </div>
+</div>
+
+<ng-template #totalStatistics>
+  <h2 class="text-centered">Total statistics:</h2>
+  <div style="display: flex; flex-direction: row">
+    <p>Sold: {{ totalReport.soldCount }} items</p>
+    <div class="flex-infinite-spacer"></div>
+    <p>Profit (income - cost): {{ totalReport.profit }}$ ({{ totalReport.income }}$ - {{ totalReport.cost }}$)</p>
+  </div>
+</ng-template>
+
+<ng-template #itemsStatistics>
+  <h2 class="text-centered">Top sold products</h2>
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sold">
+        <mat-header-cell *matHeaderCellDef> Sold </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.soldCount}} items </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cost">
+          <mat-header-cell *matHeaderCellDef> Cost </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.cost}}$ </mat-cell>
+        </ng-container>
+
+      <ng-container matColumnDef="income">
+          <mat-header-cell *matHeaderCellDef> Income </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.income}}$ </mat-cell>
+        </ng-container>
+
+      <ng-container matColumnDef="profit">
+        <mat-header-cell *matHeaderCellDef> Profit (avg / item) </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.profit}}$ ({{element.averageProfitPerItem}}$) </mat-cell>
+      </ng-container>
+    </mat-table>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <h1 class="loading-label text-centered">Loading...</h1>
+</ng-template>

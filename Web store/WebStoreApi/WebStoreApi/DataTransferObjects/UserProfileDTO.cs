@@ -1,4 +1,5 @@
-﻿using WebStore.Api.Contracts;
+﻿using System.Collections.Generic;
+using WebStore.Api.Contracts;
 
 namespace WebStore.Api.DataTransferObjects
 {
@@ -8,6 +9,6 @@ namespace WebStore.Api.DataTransferObjects
 
         public string UserName { get; set; }
 
-        public bool IsAdministrator { get; set; }
+        public IList<string> RoleNames { get; set; }
     }
 }

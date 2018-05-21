@@ -83,7 +83,7 @@ namespace WebStore.Api.Controllers
             {
                 Email = user.Email,
                 UserName = user.UserName,
-                IsAdministrator = await _userManager.IsInRoleAsync(user, "Administrator")
+                RoleNames = await _userManager.GetRolesAsync(user)
             };
         }
     }

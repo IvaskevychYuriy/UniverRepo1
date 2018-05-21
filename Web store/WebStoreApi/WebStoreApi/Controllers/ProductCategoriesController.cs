@@ -78,7 +78,7 @@ namespace WebStore.Api.Controllers
         }
 
         // POST: /ProductCategories/
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductCategoryDTO productCategory)
         {
@@ -95,7 +95,7 @@ namespace WebStore.Api.Controllers
         }
 
         // POST: /ProductCategories/sub
-        [Authorize(Roles = RoleNames.AdminRoleName)]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpPost("sub")]
         public async Task<IActionResult> CreateSub([FromBody] ProductSubCategoryDTO productSubCategory)
         {

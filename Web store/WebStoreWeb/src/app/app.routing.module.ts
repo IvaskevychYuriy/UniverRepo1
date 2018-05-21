@@ -7,13 +7,15 @@ import { ProductsMenuComponent } from '../components/products-menu/products-menu
 import { ShoppingCartComponent } from '../components/shopping-cart/shopping-cart.component';
 import { OrderHistoryComponent } from '../components/order-history/order-history.component';
 import { StoragesMenuComponent } from '../components/storages-menu/storages-menu.component';
+import { ReportsComponent } from '../components/reports/reports.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'cart', component: ShoppingCartComponent },
-    { path: 'orders', component: OrderHistoryComponent },
+    { path: 'orders', component: OrderHistoryComponent, canActivate: [AuthGuard] },
     { path: 'products', component: ProductsMenuComponent, canActivate: [AuthGuard] },
     { path: 'storages', component: StoragesMenuComponent, canActivate: [AuthGuard] },
+    { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent, data: {is_register: false} },
     { path: 'register', component: LoginComponent, data: {is_register: true} },
 

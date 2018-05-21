@@ -17,15 +17,13 @@ namespace WebStore.Api.Extensions
                 var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<UserRole>>();
-                var adminRole = roleManager.FindByNameAsync(RoleNames.AdminRoleName).Result;
-                if (adminRole == null)
+                foreach (var roleName in new[] { RoleNames.User, RoleNames.Admin, RoleNames.Owner })
                 {
-                    roleManager.CreateAsync(new UserRole(RoleNames.AdminRoleName)).Wait();
-                }
-                var userRole = roleManager.FindByNameAsync(RoleNames.UserRoleName).Result;
-                if (userRole == null)
-                {
-                    roleManager.CreateAsync(new UserRole(RoleNames.UserRoleName)).Wait();
+                    var role = roleManager.FindByNameAsync(roleName).Result;
+                    if (role == null)
+                    {
+                        roleManager.CreateAsync(new UserRole(roleName)).Wait();
+                    }
                 }
 
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -40,7 +38,21 @@ namespace WebStore.Api.Extensions
                     };
 
                     userManager.CreateAsync(admin, "admin").Wait();
-                    userManager.AddToRolesAsync(admin, new[] { RoleNames.UserRoleName, RoleNames.AdminRoleName }).Wait();
+                    userManager.AddToRolesAsync(admin, new[] { RoleNames.User, RoleNames.Admin }).Wait();
+                }
+                
+                var ownerUser = userManager.FindByNameAsync("Owner").Result;
+                if (ownerUser == null)
+                {
+                    var owner = new User()
+                    {
+                        UserName = "Owner",
+                        Email = "owner@gmail.com",
+                        LockoutEnabled = false
+                    };
+
+                    userManager.CreateAsync(owner, "owner").Wait();
+                    userManager.AddToRolesAsync(owner, new[] { RoleNames.User, RoleNames.Admin, RoleNames.Owner }).Wait();
                 }
 
                 db.SaveChanges();

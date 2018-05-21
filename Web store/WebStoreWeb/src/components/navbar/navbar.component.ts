@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ViewChildren } from '@angular/core';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
@@ -57,7 +57,22 @@ export class NavbarComponent {
         this.router.navigate(['/orders']);
     }
 
+    openReportsMenu() {
+        this.closeMenus();
+        this.router.navigate(['/reports']);
+    }
+
     private closeMenus() {
-        this.triggers.forEach(t => t.closeMenu());
+        this.triggers.forEach(t => {
+            if (t) {
+                t.closeMenu();
+            }
+        });
+    }
+
+    isInRole(role: string): boolean {
+        return this.authService.userProfile 
+            && this.authService.userProfile.roleNames
+            && this.authService.userProfile.roleNames.indexOf(role) !== -1;
     }
 }

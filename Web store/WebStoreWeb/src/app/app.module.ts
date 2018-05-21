@@ -28,6 +28,8 @@ import { OrderService } from '../services/order.service';
 import { OrderHistoryComponent } from '../components/order-history/order-history.component';
 import { StoragesMenuComponent } from '../components/storages-menu/storages-menu.component';
 import { StoragesService } from '../services/storages.service';
+import { ReportsComponent } from '../components/reports/reports.component';
+import { ReportsService } from '../services/reports.service';
 
 @NgModule({
   imports: [
@@ -61,7 +63,8 @@ declarations: [
     ProductGridComponent,
     OrderHistoryComponent,
     ShoppingCartComponent,
-    StoragesMenuComponent
+    StoragesMenuComponent,
+    ReportsComponent
 ],
 providers: [
     AuthGuard,
@@ -72,6 +75,7 @@ providers: [
     ShoppingCartService,
     OrderService,
     StoragesService,
+    ReportsService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpOptionsInterceptor, multi: true }
 ],
   bootstrap: [AppComponent]
