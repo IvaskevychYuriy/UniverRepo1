@@ -3,11 +3,14 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Api.Constants;
 using WebStore.Api.DataTransferObjects;
+using WebStore.Api.Models;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
+using WebStore.Models.Enumerations;
 
 namespace WebStore.Api.Controllers
 {
@@ -46,8 +49,28 @@ namespace WebStore.Api.Controllers
                 .Include(s => s.Items)
                     .ThenInclude(i => i.ProductItem)
                 .AsNoTracking()
+                .Select(s => new StorageGroupedModel()
+                {
+                    Id = s.Id,
+                    Name = s.Name
+                })
                 .FirstOrDefaultAsync(s => s.Id == id);
 
+            result.Items = _dbContext.StorageItems
+                .AsNoTracking()
+                .Where(si => si.StorageId == id && si.State == StorageItemState.Available)
+                .ToList()
+                .GroupBy(si => new { si.ProductId, si.Price })
+                .Join(_dbContext.ProductItems.AsNoTracking(), g => g.Key.ProductId, pi => pi.Id, (g, pi) => new { g, pi })
+                .Select(joined => new StorageGroupedItemModel()
+                {
+                    ProductId = joined.g.Key.ProductId,
+                    Price = joined.g.Key.Price,
+                    Product = joined.pi,
+                    Quantity = joined.g.Count()
+                })
+                .ToList();
+            
             return Ok(_mapper.Map<StorageDTO>(result));
         }
 
@@ -67,8 +90,14 @@ namespace WebStore.Api.Controllers
         [HttpPost("item")]
         public async Task<IActionResult> PostItem([FromBody]StorageItemDTO value)
         {
-            var item = _mapper.Map<StorageItem>(value);
-            await _dbContext.StorageItems.AddAsync(item);
+            for (int i = 0; i < value.Quantity; ++i)
+            {
+                var item = _mapper.Map<StorageItem>(value);
+                item.CartItemId = null;
+                item.State = StorageItemState.Available;
+                await _dbContext.StorageItems.AddAsync(item);
+            }
+
             await _dbContext.SaveChangesAsync();
             return Ok();
         }

@@ -4,10 +4,10 @@
     {
         public int ProductId { get; set; }
         public virtual ProductItem Product { get; set; }
+        
+        public virtual StorageItem StorageItem { get; set; }
 
         public int OrderId { get; set; }
         public virtual Order Order { get; set; }
-
-        public int Quantity { get; set; }
     }
 }

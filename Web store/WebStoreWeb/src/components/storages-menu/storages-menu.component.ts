@@ -78,7 +78,6 @@ export class StoragesMenuComponent implements OnInit {
 
   private async loadStorage(storage: Storage) {
     this.selectedStorage = await this.storagesService.storage(storage.id);
-    console.log(this.selectedStorage);
     this.newStorageItem.storageId = storage.id;
     this.dataSource = new StorageItemsDataSource(this.selectedStorage.items);
   }

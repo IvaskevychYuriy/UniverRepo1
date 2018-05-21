@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using System.Linq;
 using WebStore.Api.DataTransferObjects;
+using WebStore.Api.Models;
 using WebStore.Models.Entities;
+using WebStore.Models.Enumerations;
 
 namespace WebStore.Api.MapperProfiles
 {
@@ -13,15 +15,17 @@ namespace WebStore.Api.MapperProfiles
             CreateMap<ProductCategory, ProductCategoryDTO>();
             CreateMap<ProductSubCategory, ProductSubCategoryDTO>();
             CreateMap<ProductItem, ProductItemDTO>()
-                .ForMember(dest => dest.AvailableCount, opt => opt.MapFrom(src => src.StorageItems.Sum(si => si.Quantity)));
+                .ForMember(dest => dest.AvailableCount, opt => opt.MapFrom(src => src.StorageItems.Count(si => si.State == StorageItemState.Available)));
             CreateMap<Order, OrderDTO>();
-            CreateMap<CartItem, CartItemDTO>();
+            CreateMap<CartItem, CartItemDTO>()
+                .ForMember(dest => dest.Product, opt => opt.Ignore());
             CreateMap<OrderHistory, OrderHistoryDTO>();
-            CreateMap<StorageItem, StorageItemDTO>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductItem.Name));
+            CreateMap<StorageGroupedItemModel, StorageItemDTO>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
             CreateMap<Storage, StorageListItemDTO>();
-            CreateMap<Storage, StorageDTO>()
-                .IncludeBase<Storage, StorageListItemDTO>();
+            CreateMap<StorageGroupedModel, StorageListItemDTO>();
+            CreateMap<StorageGroupedModel, StorageDTO>()
+                .IncludeBase<StorageGroupedModel, StorageListItemDTO>();
 
 
             // maps from dtos to entities

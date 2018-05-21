@@ -65,8 +65,44 @@ namespace WebStore.Api.Controllers
                 return BadRequest("invalid model state");
             }
 
-            var order = _mapper.Map<Order>(orderDto);
-            await FillOrderAsync(order);
+            var order = new Order();
+            orderDto.CartItems = orderDto.CartItems.OrderBy(ci => ci.Id).ToList();
+
+            var ids = orderDto.CartItems.Select(ci => ci.Product.Id).ToList();
+            var items = await _dbContext.ProductItems
+                .Where(pi => ids.Contains(pi.Id))
+                .OrderBy(pi => pi.Id)
+                .Select(pi => new
+                {
+                    Price = pi.Price,
+                    StorageItems = pi.StorageItems
+                        .Where(si => si.State == StorageItemState.Available)
+                        .OrderBy(si => si.Price)
+                        .ToList()
+                })
+                .ToListAsync();
+
+            decimal totalPrice = 0;
+            for (int i = 0; i < ids.Count; ++i)
+            {
+                if (items[i].StorageItems.Count < orderDto.CartItems[i].Quantity)
+                {
+                    return BadRequest();
+                }
+
+                totalPrice += orderDto.CartItems[i].Quantity * items[i].Price;
+
+                for (int c = 0; c < orderDto.CartItems[i].Quantity; ++c)
+                {
+                    order.CartItems.Add(new CartItem()
+                    {
+                        ProductId = ids[i],
+                        StorageItem = items[i].StorageItems[c]
+                    });
+                }
+            }
+
+            order.TotalPrice = totalPrice;
             order.UserId = User.GetId();
             order.HistoryRecords.Add(new OrderHistory()
             {
@@ -89,21 +125,40 @@ namespace WebStore.Api.Controllers
                 return BadRequest("invalid model state");
             }
 
-            var order = _mapper.Map<Order>(orderDto);
-            await FillOrderAsync(order);
-            return Ok(_mapper.Map<OrderDTO>(order));
-        }
+            var order = new OrderDTO();
+            orderDto.CartItems = orderDto.CartItems.OrderBy(ci => ci.Id).ToList();
 
-        private async Task FillOrderAsync(Order order)
-        {
-            decimal total = 0;
-            foreach (var ci in order.CartItems)
+            var ids = orderDto.CartItems.Select(ci => ci.Product.Id).ToList();
+            var items = await _dbContext.ProductItems
+                .AsNoTracking()
+                .Where(pi => ids.Contains(pi.Id))
+                .OrderBy(pi => pi.Id)
+                .Select(pi => new
+                {
+                    Price = pi.Price,
+                    Product = pi,
+                    AvailableCount = pi.StorageItems.Count(si => si.State == StorageItemState.Available)
+                })
+                .ToListAsync();
+
+            decimal totalPrice = 0;
+            for (int i = 0; i < ids.Count; ++i)
             {
-                ci.Product = await _dbContext.ProductItems.FirstOrDefaultAsync(p => p.Id == ci.ProductId);
-                total += ci.Product.Price * ci.Quantity;
+                if (items[i].AvailableCount < orderDto.CartItems[i].Quantity)
+                {
+                    return BadRequest();
+                }
+
+                totalPrice += orderDto.CartItems[i].Quantity * items[i].Price;
+                order.CartItems.Add(new CartItemDTO()
+                {
+                    Product = _mapper.Map<ProductItemDTO>(items[i].Product),
+                    Quantity = orderDto.CartItems[i].Quantity
+                });
             }
 
-            order.TotalPrice = total;
+            order.TotalPrice = totalPrice;
+            return Ok(order);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace WebStore.DAL.Contexts
             {
                 b.ToTable("CartItem");
                 b.HasKey(pi => pi.Id);
-                b.Property(pi => pi.Quantity).IsRequired();
+                b.HasOne(pi => pi.StorageItem).WithOne(si => si.CartItem).HasForeignKey<StorageItem>(si => si.CartItemId);
                 b.HasOne(pi => pi.Product).WithMany(pc => pc.CartItems).HasForeignKey(pi => pi.ProductId);
                 b.HasOne(pi => pi.Order).WithMany(pc => pc.CartItems).HasForeignKey(pi => pi.OrderId);
             });
@@ -88,7 +88,6 @@ namespace WebStore.DAL.Contexts
                 b.ToTable("StorageItem");
                 b.HasKey(e => e.Id);
                 b.Property(e => e.Price).IsRequired();
-                b.Property(e => e.Quantity).IsRequired();
                 b.HasOne(e => e.ProductItem).WithMany(o => o.StorageItems).HasForeignKey(e => e.ProductId);
                 b.HasOne(e => e.Storage).WithMany(o => o.Items).HasForeignKey(e => e.StorageId);
             });

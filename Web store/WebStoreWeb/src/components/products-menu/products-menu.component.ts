@@ -41,6 +41,7 @@ export class ProductsMenuComponent implements OnInit {
     
     async ngOnInit() {
         await this.fetchCategories();
+        await this.fetchSubCategories();
     }
 
     async addNewProduct() {
