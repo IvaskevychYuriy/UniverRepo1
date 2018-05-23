@@ -4,10 +4,10 @@ import { OrderService } from '../../services/order.service';
 import { CartItem } from '../../models/cart-item';
 import { Order } from '../../models/order';
 import { AuthenticationService } from '../../services/authentication.service';
-import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -24,20 +24,17 @@ export class ShoppingCartComponent implements OnInit{
         private cartService: ShoppingCartService,
         private orderService: OrderService,
         private authService: AuthenticationService,
-        private alertService: AlertService,
+        private alert: AlertService,
         private router: Router) {
         this.displayedColumns = ["name", "quantity", "price"];
     }
     
-    ngOnInit(): void {
+    async ngOnInit() {
         const order = new Order();
         order.cartItems = this.cartService.allItems;
-        this.orderService.calculateOrderInfo(order)
-            .then(result => 
-            {
-                this.order = result;
-                this.dataSource = new OrderProductsDataSource(this.order);
-            })
+
+        this.order = await this.orderService.calculateOrderInfo(order);
+        this.dataSource = new OrderProductsDataSource(this.order);
     }
 
     get nothingAdded(): boolean {
@@ -60,23 +57,24 @@ export class ShoppingCartComponent implements OnInit{
         this.order.cartItems.splice(index, 1);
     }
 
-    private submitOrder(): void {
+    private async submitOrder() {
         if(!this.order || !this.order.cartItems || this.order.cartItems.length < 1) {
             return;
         }
 
         if(!this.authService.userProfile) {
-            this.alertService.error("Please, login to buy");
+            this.alert.info("Please, login to buy");
             return;
         }
 
-        this.orderService.createOrder(this.order)
-            .then(result => {
-                this.alertService.success(`Order #${result.id} successfully created`);
-                this.cartService.clearCart();
-                this.router.navigate(['/home']);
-            })
-            .catch(err => this.alertService.error(`An error has occured. Please try again later`));
+        try {
+            const result = await this.orderService.createOrder(this.order);
+            this.alert.info(`Order successfully created`);
+            this.cartService.clearCart();
+            this.router.navigate(['/home']);
+        } catch (e) {
+            this.alert.info(`An error has occured. Please try again later`);
+        }
     }
 }
 

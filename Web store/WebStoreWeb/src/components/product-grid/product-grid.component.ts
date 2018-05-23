@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductItemsService } from '../../services/product-items.service';
 import { Subscription } from 'rxjs';
 import { PageData } from '../../models/page-data';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -22,6 +23,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
     constructor (
         private route: ActivatedRoute,
         private router: Router,
+        private alert: AlertService,
         private productsService: ProductItemsService) {
 
         this.pageData = new PageData();
@@ -47,7 +49,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
         try {
             this.pageData = await this.productsService.fetchItems(this.categoryId, this.subCategoryId, this.itemsPerPage, this.currentPage)
         } catch (e) {
-            //TODO: add toast "Could not fetch items, please try again later"
+            this.alert.info("Could not fetch items, please try again later");
         }
     }
 }

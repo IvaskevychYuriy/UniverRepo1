@@ -3,8 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { LoginInfo } from '../../models/login-info';
-import { AlertService } from '../../services/alert.service';
 import { Subscription } from 'rxjs';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService) { 
+        private alert: AlertService) { 
             this.model = new LoginInfo();
         }
 
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    this.alertService.error(error);
+                    this.alert.info(error);
                     this.loading = false;
                 });
     }
@@ -60,11 +60,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authenticationService.register(this.model)
             .subscribe(
                 data => {
-                    this.alertService.success('Registration successful', true);
+                    this.alert.info('Registration successful');
                     this.router.navigate(['/login']);
                 },
                 error => {
-                    this.alertService.error(error);
+                    this.alert.info(error);
                     this.loading = false;
                 });
     }

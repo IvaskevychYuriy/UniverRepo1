@@ -8,6 +8,7 @@ import { StoragesService } from '../../services/storages.service';
 import { Storage } from '../../models/storage';
 import { DataSource } from '@angular/cdk/table';
 import { CollectionViewer } from '@angular/cdk/collections';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   moduleId: module.id.toString(),
@@ -30,6 +31,7 @@ export class StoragesMenuComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private storagesService: StoragesService,
+    private alert: AlertService,
     private itemsService: ProductItemsService) {
   
     this.displayedColumns = ["name", "price", "quantity"];
@@ -50,7 +52,7 @@ export class StoragesMenuComponent implements OnInit {
     try {
       await this.storagesService.add(this.newStorage);
     } catch (e) {
-      // TODO: add a toast
+      this.alert.info("Couldn't add new storage");
     }
 
     await this.fetchStorages();
@@ -60,7 +62,7 @@ export class StoragesMenuComponent implements OnInit {
     try {
       await this.storagesService.addItem(this.newStorageItem);
     } catch (e) {
-      // TODO: add a toast
+      this.alert.info("Couldn't add new storage item");
     }
 
     await this.fetchProducts();

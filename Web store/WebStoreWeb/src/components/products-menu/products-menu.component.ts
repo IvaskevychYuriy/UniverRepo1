@@ -6,6 +6,7 @@ import { ProductCategory } from '../../models/product-category';
 import { ProductCategoriesService } from '../../services/product-categories.service';
 import { ProductItemsService } from '../../services/product-items.service';
 import { ProductSubCategory } from '../../models/product-sub-category';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -24,6 +25,7 @@ export class ProductsMenuComponent implements OnInit {
     constructor(
         private http: HttpClient,
         private categoriesService: ProductCategoriesService,
+        private alert: AlertService,
         private itemsService: ProductItemsService) { 
 
         this.newProduct = new ProductItem();
@@ -48,7 +50,7 @@ export class ProductsMenuComponent implements OnInit {
         try {
             await this.itemsService.add(this.newProduct);
         } catch (e) {
-            // TODO: add toast
+            this.alert.info("Couldn't add new product");
         }
     }
 
@@ -56,7 +58,7 @@ export class ProductsMenuComponent implements OnInit {
         try {
             await this.categoriesService.add(this.newCategory);
         } catch (e) {
-            // TODO: add toast
+            this.alert.info("Couldn't add new category");
         }
         
         await this.fetchCategories();
@@ -66,7 +68,7 @@ export class ProductsMenuComponent implements OnInit {
         try {
             await this.categoriesService.addSub(this.newSubCategory);
         } catch (e) {
-            // TODO: add toast
+            this.alert.info("Couldn't add new subcategory");
         }
         
         await this.fetchSubCategories();

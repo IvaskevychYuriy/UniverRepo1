@@ -1,39 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar, MatSnackBarConfig } from '@angular/material';
 
 @Injectable()
 export class AlertService {
-    private subject = new Subject<any>();
-    private keepAfterNavigationChange = false;
 
-    constructor(private router: Router) {
-        // clear alert message on route change
-        router.events.subscribe(event => {
-            if (event instanceof NavigationStart) {
-                if (this.keepAfterNavigationChange) {
-                    // only keep for a single location change
-                    this.keepAfterNavigationChange = false;
-                } else {
-                    // clear alert
-                    this.subject.next();
-                }
-            }
-        });
+    private defaultSnackDuration: number = 1500;
+
+    private snackBarRef: MatSnackBarRef<SimpleSnackBar>;
+    private defaultConfig: MatSnackBarConfig;
+
+    constructor(
+        private snackBar: MatSnackBar
+    ) {
+        this.defaultConfig = {
+            duration: this.defaultSnackDuration
+        };
     }
 
-    success(message: string, keepAfterNavigationChange = false) {
-        this.keepAfterNavigationChange = keepAfterNavigationChange;
-        this.subject.next({ type: 'success', text: message });
-    }
-
-    error(message: string, keepAfterNavigationChange = false) {
-        this.keepAfterNavigationChange = keepAfterNavigationChange;
-        this.subject.next({ type: 'error', text: message });
-    }
-
-    getMessage(): Observable<any> {
-        return this.subject.asObservable();
+    info(message: string) {
+        this.snackBarRef = this.snackBar.open(message, null, this.defaultConfig);
     }
 }

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { routing } from './app.routing.module';
-import { AlertComponent } from '../directives/alert-directive/alert.component';
 import { LoginComponent } from '../components/login/login.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { AlertService } from '../services/alert.service';
@@ -14,7 +13,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpOptionsInterceptor } from '../services/http-options.interceptor';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule, MatMenuModule, MatListModule, MatInputModule, MatCardModule, MatPaginatorModule, MatSelectModule, MatOptionModule, MatTableModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule, MatMenuModule, MatListModule, MatInputModule, MatCardModule, MatPaginatorModule, MatSelectModule, MatOptionModule, MatTableModule, MatSnackBarModule } from '@angular/material';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { ProductCellComponent } from '../components/product-grid/product-cell/product-cell.component';
 import { ProductGridComponent } from '../components/product-grid/product-grid.component';
@@ -49,11 +48,11 @@ import { ReportsService } from '../services/reports.service';
     MatPaginatorModule,
     MatTableModule,
     MatMenuModule,
+    MatSnackBarModule,
     routing
 ],
 declarations: [
     AppComponent,
-    AlertComponent,
     HomeComponent,
     ProductsMenuComponent,
     LoginComponent,
@@ -68,7 +67,6 @@ declarations: [
 ],
 providers: [
     AuthGuard,
-    AlertService,
     AuthenticationService,
     ProductCategoriesService,
     ProductItemsService,
@@ -76,6 +74,7 @@ providers: [
     OrderService,
     StoragesService,
     ReportsService,
+    AlertService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpOptionsInterceptor, multi: true }
 ],
   bootstrap: [AppComponent]
