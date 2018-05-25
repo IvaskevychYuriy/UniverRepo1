@@ -61,6 +61,11 @@ export class NavbarComponent {
         this.closeMenus();
         this.router.navigate(['/reports']);
     }
+    
+    openHangfireDashboard() {
+        this.closeMenus();
+        this.router.navigate(['/jobs']);
+    }
 
     private closeMenus() {
         this.triggers.forEach(t => {

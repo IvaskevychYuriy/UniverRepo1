@@ -33,7 +33,12 @@ export class ShoppingCartComponent implements OnInit{
         const order = new Order();
         order.cartItems = this.cartService.allItems;
 
-        this.order = await this.orderService.calculateOrderInfo(order);
+        try {
+            this.order = await this.orderService.calculateOrderInfo(order);
+        } catch (e) {
+            this.cartService.clearCart();
+        }
+        
         this.dataSource = new OrderProductsDataSource(this.order);
     }
 

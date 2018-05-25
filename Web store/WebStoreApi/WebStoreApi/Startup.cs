@@ -10,6 +10,9 @@ using WebStore.Models.Entities;
 using WebStore.Api.Extensions;
 using System.Threading.Tasks;
 using AutoMapper;
+using Hangfire;
+using Hangfire.AspNetCore;
+using WebStore.Api.Helpers;
 
 namespace WebStore.Api
 {
@@ -67,9 +70,12 @@ namespace WebStore.Api
             });
 
             services.AddCors();
+            
+            services.AddHangfire(cfg => 
+                cfg.UseSqlServerStorage(Configuration.GetConnectionString("HangfireDBConnection")));
 
             services.AddMvc();
-
+            
             services.AddAutoMapper();
         }
 
@@ -92,6 +98,15 @@ namespace WebStore.Api
                 cfg.AllowAnyMethod();
                 cfg.AllowAnyHeader();
                 cfg.WithOrigins("http://localhost:4200");
+            });
+            
+            app.UseHangfireDashboard("/jobs", new DashboardOptions()
+            {
+                Authorization = new [] { new HandfireDashboardAuthFilter() }
+            });
+            app.UseHangfireServer(new BackgroundJobServerOptions()
+            {
+                Activator = new AspNetCoreJobActivator(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>())
             });
 
             app.UseMvc(routes =>

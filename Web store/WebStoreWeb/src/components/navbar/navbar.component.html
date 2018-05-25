@@ -13,6 +13,10 @@
                 <mat-icon>storage</mat-icon>
                 <span>Storages</span>
             </button>
+            <button mat-menu-item (click)="openHangfireDashboard()">
+                <mat-icon>schedule</mat-icon>
+                <span>Jobs</span>
+            </button>
             <button mat-menu-item (click)="openReportsMenu()" *ngIf="isInRole('Owner')">
                 <mat-icon>sort</mat-icon>
                 <span>Reports</span>
