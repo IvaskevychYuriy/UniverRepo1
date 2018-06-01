@@ -1,4 +1,4 @@
-<div class="container" [ngClass]="(selectedStorage.items && selectedStorage.items.length) ? 'force-full-width' : ''">
+<div class="container">
   <h2 style="text-align: center">Storages menu</h2>
   <div class="col-sm-4" style="display: flex; flex-direction: column;">
     <div class="col-sm-12" *ngIf="(storages && storages.length)">
@@ -19,6 +19,30 @@
             <input matInput type="text" class="form-control" name="storageName" [(ngModel)]="newStorage.name" #storageName="ngModel"
               required/>
             <mat-error>Name is required</mat-error>
+          </mat-form-field>    
+          <label style="">Destination</label>
+          <agm-map class="map-new-location" [latitude]="initialMapCoords.latitude" [longitude]="initialMapCoords.longitude" (mapClick)="newStorageMapClicked($event)">
+            <agm-marker *ngIf="newStorage && newStorage.coordinates" [latitude]="newStorage.coordinates.latitude" [longitude]="newStorage.coordinates.longitude"></agm-marker>
+          </agm-map>
+          <div class="form-group">
+            <button mat-icon-button>
+              <span>Add</span>
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div>
+        <h3>Add Drones:</h3>
+        <h5 *ngIf="!(selectedStorage && selectedStorage.id)" style="color: crimson">Select a storage first</h5>
+        <form *ngIf="selectedStorage && selectedStorage.id" name="newDronesForm" (ngSubmit)="dronesForm.form.valid && addNewDrones()"
+          #dronesForm="ngForm" novalidate>
+          <mat-form-field>
+            <label for="dronesQuantity">Quantity</label>
+            <input matInput type="number" min="1" class="form-control" name="dronesQuantity" [(ngModel)]="newDronesModel.quantity" #dronesQuantity="ngModel" required/>
+            <mat-error>Quantity is required</mat-error>
           </mat-form-field>
           <div class="form-group">
             <button mat-icon-button>
@@ -65,6 +89,10 @@
     </div>
   </div>
   <div class="col-sm-8" style="display: flex; flex-direction: column;">
+    <div *ngIf="selectedStorage && selectedStorage.id && selectedStorage.coordinates; then selectedStorageLocationTemplate else noStorageLocationTemplate">
+    </div>
+    <div *ngIf="selectedStorage.drones && selectedStorage.drones.length; then selectedStorageDronesTemplate else noStorageDronesTemplate">
+    </div>
     <div *ngIf="selectedStorage.items && selectedStorage.items.length; then selectedStorageTemplate else noStorageTemplate">
     </div>
   </div>
@@ -100,3 +128,47 @@
     <h3 class="noitemslabel-container">No Items</h3>
   </div>
 </ng-template>
+
+<ng-template #selectedStorageDronesTemplate>
+  <h3 style="text-align: center">Drones</h3>
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dronesDataSource">
+      <mat-header-row *matHeaderRowDef="dronesDisplayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: dronesDisplayedColumns;"></mat-row>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{droneState(element)}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="arrivalTime">
+        <mat-header-cell *matHeaderCellDef> Arrival </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{droneArrival(element)}} </mat-cell>
+      </ng-container>
+    </mat-table>
+  </div>
+</ng-template>
+
+<ng-template #noStorageDronesTemplate>
+  <div class="col-sm-12">
+    <h3 class="noitemslabel-container">No Drones</h3>
+  </div>
+</ng-template>
+
+<ng-template #selectedStorageLocationTemplate>
+    <h3 style="text-align: center">Location</h3>
+    <agm-map class="map-existing-location" [latitude]="selectedStorage.coordinates.latitude" [longitude]="selectedStorage.coordinates.longitude">
+      <agm-marker [latitude]="selectedStorage.coordinates.latitude" [longitude]="selectedStorage.coordinates.longitude"></agm-marker>
+    </agm-map>
+  </ng-template>
+  
+  <ng-template #noStorageLocationTemplate>
+    <div class="col-sm-12">
+      <h3 class="noitemslabel-container">No Location</h3>
+    </div>
+  </ng-template>

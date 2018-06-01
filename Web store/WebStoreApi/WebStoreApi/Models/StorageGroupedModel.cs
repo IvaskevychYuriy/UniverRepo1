@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WebStore.Models.Entities;
+using WebStore.Models.Models;
 
 namespace WebStore.Api.Models
 {
@@ -7,7 +8,9 @@ namespace WebStore.Api.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public AddressCoordinates Coordinates { get; set; }
         public List<StorageGroupedItemModel> Items { get; set; }
+        public List<Drone> Drones { get; set; }
     }
 
     public class StorageGroupedItemModel

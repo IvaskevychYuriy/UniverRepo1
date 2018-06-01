@@ -19,6 +19,12 @@ form mat-form-field {
     text-align: center;
 }
 
-.force-full-width {
-    width: 100% !important;
+.map-existing-location {
+    height: 300px;
+    width: 100%;
+}
+
+.map-new-location {
+    height: 200px;
+    width: 100%;
 }

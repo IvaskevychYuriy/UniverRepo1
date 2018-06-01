@@ -1,6 +1,8 @@
-﻿namespace WebStore.Api.DataTransferObjects
+﻿using WebStore.Api.Contracts;
+
+namespace WebStore.Api.DataTransferObjects
 {
-    public class TotalReportDTO
+    public class TotalReportDTO : IDataTransferObject
     {
         public int SoldCount { get; set; }
 

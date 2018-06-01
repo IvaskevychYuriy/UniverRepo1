@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
+import { AddressCoordinates } from '../../models/address-coordinates';
 
 @Component({
     moduleId: module.id.toString(),
@@ -20,13 +21,21 @@ export class ShoppingCartComponent implements OnInit{
     private dataSource: OrderProductsDataSource;
     private displayedColumns: string[];
 
+    private destinationCoordinates: AddressCoordinates;
+    private initialMapCoords: AddressCoordinates;
+
     constructor(
         private cartService: ShoppingCartService,
         private orderService: OrderService,
         private authService: AuthenticationService,
         private alert: AlertService,
         private router: Router) {
+
         this.displayedColumns = ["name", "quantity", "price"];
+        this.initialMapCoords = {
+            latitude: 51.5,
+            longitude: 0
+        };
     }
     
     async ngOnInit() {
@@ -72,7 +81,13 @@ export class ShoppingCartComponent implements OnInit{
             return;
         }
 
+        if(!this.destinationCoordinates) {
+            this.alert.info("Please, select a destination address");
+            return;
+        }
+
         try {
+            this.order.coordinates = this.destinationCoordinates;
             const result = await this.orderService.createOrder(this.order);
             this.alert.info(`Order successfully created`);
             this.cartService.clearCart();
@@ -80,6 +95,13 @@ export class ShoppingCartComponent implements OnInit{
         } catch (e) {
             this.alert.info(`An error has occured. Please try again later`);
         }
+    }
+
+    private mapClicked(event: any) {
+        this.destinationCoordinates = {
+            latitude: event.coords.lat,
+            longitude: event.coords.lng
+        };
     }
 }
 

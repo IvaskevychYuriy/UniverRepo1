@@ -1,6 +1,6 @@
 ﻿namespace WebStore.Models.Enumerations
 {
-    public enum StorageItemState
+    public enum StorageItemStates
     {
         Available,
         Ordered,

@@ -10,6 +10,7 @@ using WebStore.Api.Extensions;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
 using WebStore.Models.Enumerations;
+using WebStore.Models.Models;
 
 namespace WebStore.Api.Controllers
 {
@@ -78,7 +79,7 @@ namespace WebStore.Api.Controllers
                 .ToListAsync();
 
             var storageItems = _dbContext.StorageItems
-                .Where(si => ids.Contains(si.ProductId) && si.State == StorageItemState.Available)
+                .Where(si => ids.Contains(si.ProductId) && si.State == StorageItemStates.Available)
                 .GroupBy(si => si.ProductId)
                 .OrderBy(g => g.Key)
                 .ToList();
@@ -96,7 +97,7 @@ namespace WebStore.Api.Controllers
 
                 for (int c = 0; c < orderDto.CartItems[i].Quantity; ++c)
                 {
-                    sItems[c].State = StorageItemState.Ordered;
+                    sItems[c].State = StorageItemStates.Ordered;
                     sItems[c].CartItem = new CartItem()
                     {
                         ProductId = ids[i],
@@ -109,6 +110,7 @@ namespace WebStore.Api.Controllers
 
             order.TotalPrice = totalPrice;
             order.UserId = User.GetId();
+            order.Coordinates = _mapper.Map<AddressCoordinates>(orderDto.Coordinates);
             order.HistoryRecords.Add(new OrderHistory()
             {
                 State = OrderStates.New
@@ -142,7 +144,7 @@ namespace WebStore.Api.Controllers
                 {
                     Price = pi.Price,
                     Product = pi,
-                    AvailableCount = pi.StorageItems.Count(si => si.State == StorageItemState.Available)
+                    AvailableCount = pi.StorageItems.Count(si => si.State == StorageItemStates.Available)
                 })
                 .ToListAsync();
 

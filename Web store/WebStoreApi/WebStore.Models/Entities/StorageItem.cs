@@ -5,7 +5,7 @@ namespace WebStore.Models.Entities
     public class StorageItem : EntityBase<int>
     {
         public decimal Price { get; set; }
-        public StorageItemState State {get; set; }
+        public StorageItemStates State {get; set; }
 
         public int StorageId { get; set; }
         public virtual Storage Storage { get; set; }

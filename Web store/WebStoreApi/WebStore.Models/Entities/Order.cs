@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WebStore.Models.Models;
 
 namespace WebStore.Models.Entities
 {
@@ -11,6 +12,8 @@ namespace WebStore.Models.Entities
         }
 
         public decimal TotalPrice { get; set; }
+
+        public AddressCoordinates Coordinates { get; set; }
 
         public int UserId { get; set; }
         public virtual User User { get; set; }

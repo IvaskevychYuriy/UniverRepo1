@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
-using WebStore.Common.Contracts;
+using WebStore.Models.Contracts;
 
 namespace WebStore.Models.Entities
 {

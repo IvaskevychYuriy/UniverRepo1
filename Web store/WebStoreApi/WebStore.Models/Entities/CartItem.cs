@@ -8,6 +8,7 @@
         public virtual ProductItem Product { get; set; }
         
         public virtual StorageItem StorageItem { get; set; }
+        public virtual Drone Drone { get; set; }
 
         public int OrderId { get; set; }
         public virtual Order Order { get; set; }

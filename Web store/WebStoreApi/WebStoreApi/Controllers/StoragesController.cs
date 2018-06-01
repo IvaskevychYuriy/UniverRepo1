@@ -46,19 +46,19 @@ namespace WebStore.Api.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var result = await _dbContext.Storages
-                .Include(s => s.Items)
-                    .ThenInclude(i => i.ProductItem)
                 .AsNoTracking()
                 .Select(s => new StorageGroupedModel()
                 {
                     Id = s.Id,
-                    Name = s.Name
+                    Name = s.Name,
+                    Coordinates = s.Coordinates,
+                    Drones = s.Drones.ToList()
                 })
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             result.Items = _dbContext.StorageItems
                 .AsNoTracking()
-                .Where(si => si.StorageId == id && si.State == StorageItemState.Available)
+                .Where(si => si.StorageId == id && si.State == StorageItemStates.Available)
                 .ToList()
                 .GroupBy(si => new { si.ProductId, si.Price })
                 .Join(_dbContext.ProductItems.AsNoTracking(), g => g.Key.ProductId, pi => pi.Id, (g, pi) => new { g, pi })
@@ -94,8 +94,28 @@ namespace WebStore.Api.Controllers
             {
                 var item = _mapper.Map<StorageItem>(value);
                 item.CartItemId = null;
-                item.State = StorageItemState.Available;
+                item.State = StorageItemStates.Available;
                 await _dbContext.StorageItems.AddAsync(item);
+            }
+
+            await _dbContext.SaveChangesAsync();
+            return Ok();
+        }
+
+        // POST api/<controller>/item
+        [Authorize(Roles = RoleNames.Admin)]
+        [HttpPost("drones")]
+        public async Task<IActionResult> PostDrones([FromBody]DronesAddModel model)
+        {
+            for (int i = 0; i < model.Quantity; ++i)
+            {
+                await _dbContext.Drones.AddAsync(new Drone()
+                {
+                    State = DroneStates.Available,
+                    ArrivalTime = null,
+                    StorageId = model.StorageId,
+                    CartItemId = null
+                });
             }
 
             await _dbContext.SaveChangesAsync();

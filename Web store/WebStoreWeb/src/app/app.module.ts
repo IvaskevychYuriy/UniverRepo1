@@ -11,6 +11,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { HomeComponent } from '../components/home/home.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpOptionsInterceptor } from '../services/http-options.interceptor';
+import { AgmCoreModule } from '@agm/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule, MatMenuModule, MatListModule, MatInputModule, MatCardModule, MatPaginatorModule, MatSelectModule, MatOptionModule, MatTableModule, MatSnackBarModule } from '@angular/material';
@@ -50,6 +51,9 @@ import { HangfireDashboardComponent } from '../components/hangfire-dashboard/han
     MatTableModule,
     MatMenuModule,
     MatSnackBarModule,
+    AgmCoreModule.forRoot({
+        apiKey: 'AIzaSyCR-t0z1E0rOcU1wy-wb3HTo2LagIdIkYM'
+    }),
     routing
 ],
 declarations: [

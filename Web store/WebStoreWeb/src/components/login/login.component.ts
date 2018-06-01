@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    this.alert.info(error);
+                    this.alert.info('Failed to login');
                     this.loading = false;
                 });
     }
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/login']);
                 },
                 error => {
-                    this.alert.info(error);
+                    this.alert.info('Failed to register');
                     this.loading = false;
                 });
     }

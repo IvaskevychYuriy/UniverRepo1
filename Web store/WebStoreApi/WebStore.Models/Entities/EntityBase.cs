@@ -1,4 +1,4 @@
-﻿using WebStore.Common.Contracts;
+﻿using WebStore.Models.Contracts;
 
 namespace WebStore.Models.Entities
 {

@@ -1,6 +1,8 @@
-﻿namespace WebStore.Api.DataTransferObjects
+﻿using WebStore.Api.Contracts;
+
+namespace WebStore.Api.DataTransferObjects
 {
-    public class ProductItemReportDTO
+    public class ProductItemReportDTO : IDataTransferObject
     {
         public int Id { get; set; }
         public string Name { get; set; }

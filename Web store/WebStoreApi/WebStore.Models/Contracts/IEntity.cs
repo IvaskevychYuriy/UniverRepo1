@@ -1,4 +1,4 @@
-﻿namespace WebStore.Common.Contracts
+﻿namespace WebStore.Models.Contracts
 {
     public interface IEntity<T>
     {

@@ -1,6 +1,8 @@
-﻿namespace WebStore.Api.DataTransferObjects
+﻿using WebStore.Api.Contracts;
+
+namespace WebStore.Api.DataTransferObjects
 {
-    public class StorageItemDTO
+    public class StorageItemDTO : IDataTransferObject
     {
         public int Id { get; set; }
         public decimal Price { get; set; }

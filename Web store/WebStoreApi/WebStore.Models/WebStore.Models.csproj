@@ -9,8 +9,4 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.1.0-rc1-final" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WebStore.Common\WebStore.Common.csproj" />
-  </ItemGroup>
-
 </Project>
