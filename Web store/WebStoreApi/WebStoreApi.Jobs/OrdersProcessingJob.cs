@@ -52,7 +52,7 @@ namespace WebStoreApi.Jobs
                 {
                     Order = o,
                     CartItems = o.CartItems
-                        .Where(ci => ci.StorageItem != null)
+                        .Where(ci => ci.StorageItem == null)
                         .ToList()
                 })
                 .ToListAsync();
@@ -63,7 +63,9 @@ namespace WebStoreApi.Jobs
                 .Select(s => new
                 {
                     Storage = s,
-                    Items = s.Items.ToList(),
+                    Items = s.Items
+                        .Where(i => i.CartItemId == null)
+                        .ToList(),
                     Drones = s.Drones
                         .Where(d => d.State == DroneStates.Available)
                         .ToList()
@@ -77,9 +79,13 @@ namespace WebStoreApi.Jobs
                 {
                     for (int k = 0; k < data.OrdersCount; k++)
                     {
-                        int index = i * data.ProductsCount * data.OrdersCount + data.ProductsCount * data.OrdersCount + k;
-                        var arrivalTime = utcNow.AddSeconds(info.Orders[k].Coordinates.Distance(info.Storages[i].Coordinates));
+                        int index = i * data.ProductsCount * data.OrdersCount + j * data.OrdersCount + k;
+                        if (result[index] <= 0)
+                        {
+                            continue;
+                        }
 
+                        var arrivalTime = utcNow.AddSeconds(info.Orders[k].Coordinates.Distance(info.Storages[i].Coordinates));
                         var cartItems = orders[k].CartItems
                             .Where(ci => ci.ProductId == info.ProductIds[j] && ci.Drone == null && ci.StorageItem == null)
                             .ToList();
@@ -87,11 +93,15 @@ namespace WebStoreApi.Jobs
                             .Where(d => d.CartItemId == null)
                             .ToList();
                         var items = storages[i].Items
-                            .Where(it => it.CartItemId == null)
+                            .Where(it => it.ProductId == info.ProductIds[j] && it.CartItemId == null)
                             .ToList();
 
                         for (int l = 0; l < result[index]; ++l)
                         {
+                            _dbContext.Entry(drones[l]).State = EntityState.Modified;
+                            _dbContext.Entry(cartItems[l]).State = EntityState.Modified;
+                            _dbContext.Entry(items[l]).State = EntityState.Modified;
+
                             drones[l].ArrivalTime = arrivalTime;
                             drones[l].State = DroneStates.Busy;
                             drones[l].CartItemId = cartItems[l].Id;
