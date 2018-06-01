@@ -4,7 +4,6 @@
     {
         New,
         Processing,
-        Shipping,
         Done
     }
 }

@@ -16,7 +16,7 @@ namespace WebStore.Models.Models
             double dlat = toRadians(other.Latitude - Latitude);
 
             double a = (Math.Sin(dlat / 2) * Math.Sin(dlat / 2)) + Math.Cos(toRadians(Latitude)) * Math.Cos(toRadians(other.Latitude)) * (Math.Sin(dlon / 2) * Math.Sin(dlon / 2));
-            return 12742.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return 12742.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));                    // 2 * R * atan(...
         }
     }
 }

@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebStore.DAL\WebStore.DAL.csproj" />
+    <ProjectReference Include="..\WebStoreApi.Jobs\WebStoreApi.Jobs.csproj" />
   </ItemGroup>
 
 </Project>

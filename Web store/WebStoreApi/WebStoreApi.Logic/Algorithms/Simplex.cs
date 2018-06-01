@@ -35,7 +35,7 @@ namespace WebStoreApi.Logic.Algorithms
             N = _table.GetLength(1);
         }
 
-        public double[,] Calculate(double[] result)
+        public double[,] Calculate(int[] result)
         {
             int mainCol, mainRow;
             int iterations = 0;
@@ -73,7 +73,7 @@ namespace WebStoreApi.Logic.Algorithms
             for (int i = 0; i < result.Length; i++)
             {
                 int k = _basis.IndexOf(i + 1);
-                result[i] = k != -1 ? _table[k, 0] : 0;
+                result[i] = k != -1 ? (int)_table[k, 0] : 0;
             }
             
             return _table;
