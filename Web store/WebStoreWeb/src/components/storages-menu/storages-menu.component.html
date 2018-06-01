@@ -20,7 +20,7 @@
               required/>
             <mat-error>Name is required</mat-error>
           </mat-form-field>    
-          <label style="">Destination</label>
+          <label>Location</label>
           <agm-map class="map-new-location" [latitude]="initialMapCoords.latitude" [longitude]="initialMapCoords.longitude" (mapClick)="newStorageMapClicked($event)">
             <agm-marker *ngIf="newStorage && newStorage.coordinates" [latitude]="newStorage.coordinates.latitude" [longitude]="newStorage.coordinates.longitude"></agm-marker>
           </agm-map>

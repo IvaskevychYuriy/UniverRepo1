@@ -45,6 +45,7 @@ export class ShoppingCartComponent implements OnInit{
         try {
             this.order = await this.orderService.calculateOrderInfo(order);
         } catch (e) {
+            this.alert.info("Items not available, try again later")
             this.cartService.clearCart();
         }
         

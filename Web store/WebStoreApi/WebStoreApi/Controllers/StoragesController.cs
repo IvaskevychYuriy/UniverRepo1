@@ -52,10 +52,10 @@ namespace WebStore.Api.Controllers
                     Id = s.Id,
                     Name = s.Name,
                     Coordinates = s.Coordinates,
-                    Drones = s.Drones.ToList()
+                    Drones = s.Drones.ToList(),
                 })
                 .FirstOrDefaultAsync(s => s.Id == id);
-
+            
             result.Items = _dbContext.StorageItems
                 .AsNoTracking()
                 .Where(si => si.StorageId == id && si.State == StorageItemStates.Available)

@@ -71,40 +71,31 @@ namespace WebStore.Api.Controllers
 
             var ids = orderDto.CartItems.Select(ci => ci.Product.Id).ToList();
             var items = await _dbContext.ProductItems
+                .AsNoTracking()
                 .Where(pi => ids.Contains(pi.Id))
                 .Select(pi => new
                 {
-                    Price = pi.Price
+                    Price = pi.Price,
+                    AvailableCount = pi.StorageItems.Count() - pi.CartItems.Count()
                 })
                 .ToListAsync();
-
-            var storageItems = _dbContext.StorageItems
-                .Where(si => ids.Contains(si.ProductId) && si.State == StorageItemStates.Available)
-                .GroupBy(si => si.ProductId)
-                .OrderBy(g => g.Key)
-                .ToList();
-
+            
             decimal totalPrice = 0;
             for (int i = 0; i < ids.Count; ++i)
             {
-                var sItems = storageItems[i].ToList();
-                if (sItems.Count < orderDto.CartItems[i].Quantity)
+                if (items[i].AvailableCount < orderDto.CartItems[i].Quantity)
                 {
                     return BadRequest();
                 }
 
                 totalPrice += orderDto.CartItems[i].Quantity * items[i].Price;
-
                 for (int c = 0; c < orderDto.CartItems[i].Quantity; ++c)
                 {
-                    sItems[c].State = StorageItemStates.Ordered;
-                    sItems[c].CartItem = new CartItem()
+                    order.CartItems.Add(new CartItem()
                     {
                         ProductId = ids[i],
                         ProductPrice = items[i].Price
-                    };
-
-                    order.CartItems.Add(sItems[c].CartItem);
+                    });
                 }
             }
 
@@ -144,7 +135,7 @@ namespace WebStore.Api.Controllers
                 {
                     Price = pi.Price,
                     Product = pi,
-                    AvailableCount = pi.StorageItems.Count(si => si.State == StorageItemStates.Available)
+                    AvailableCount = pi.StorageItems.Count() - pi.CartItems.Count()
                 })
                 .ToListAsync();
 

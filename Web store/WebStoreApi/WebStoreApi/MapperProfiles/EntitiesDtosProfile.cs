@@ -3,7 +3,6 @@ using System.Linq;
 using WebStore.Api.DataTransferObjects;
 using WebStore.Api.Models;
 using WebStore.Models.Entities;
-using WebStore.Models.Enumerations;
 using WebStore.Models.Models;
 
 namespace WebStore.Api.MapperProfiles
@@ -16,7 +15,7 @@ namespace WebStore.Api.MapperProfiles
             CreateMap<ProductCategory, ProductCategoryDTO>();
             CreateMap<ProductSubCategory, ProductSubCategoryDTO>();
             CreateMap<ProductItem, ProductItemDTO>()
-                .ForMember(dest => dest.AvailableCount, opt => opt.MapFrom(src => src.StorageItems.Count(si => si.State == StorageItemStates.Available)));
+                .ForMember(dest => dest.AvailableCount, opt => opt.MapFrom(src => src.StorageItems.Count() - src.CartItems.Count()));
             CreateMap<Order, OrderDTO>();
             CreateMap<CartItem, CartItemDTO>()
                 .ForMember(dest => dest.Product, opt => opt.Ignore());
