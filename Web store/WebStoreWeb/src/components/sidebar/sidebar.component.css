@@ -1,4 +1,4 @@
-.navbar-content-container {
+/* .navbar-content-container {
     min-width: 7em;
     font-size: 1.5em;
 }
@@ -29,4 +29,21 @@
 
 .navbar-content-container > li:hover, .navbar-sub-content-container > li:hover {
     background-color: rgba(0,0,0,.12);
+} */
+
+.item {
+    height: 25px !important;
+}
+
+.sub-item {
+    padding-left: 1.5em;
+    height: 25px !important;
+}
+
+.item a, .sub-item a {
+    width: 100%;
+}
+
+.active-link {
+    background-color: royalblue !important;
 }
