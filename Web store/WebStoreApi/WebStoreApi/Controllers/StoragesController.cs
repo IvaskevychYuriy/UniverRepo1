@@ -156,5 +156,27 @@ namespace WebStore.Api.Controllers
 
             return Ok();
         }
+
+        // PUT: /<controller>/
+        [Authorize(Roles = RoleNames.Admin)]
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] StorageListItemDTO storageDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid model state");
+            }
+
+            var storage = await _dbContext.Storages.FindAsync(storageDto.Id);
+            if (storage == null)
+            {
+                return BadRequest($"No such storage with id = '{storageDto.Id}'");
+            }
+
+            _mapper.Map(storageDto, storage);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

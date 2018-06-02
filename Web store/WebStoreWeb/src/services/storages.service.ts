@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Storage } from '../models/storage';
 import { StorageItem } from '../models/storage-item';
+import { StorageEditModel } from '../models/storage-edit-model';
 
 @Injectable()
 export class StoragesService {
@@ -23,6 +24,10 @@ export class StoragesService {
     
     public async addItem(item: StorageItem) {
         await this.http.post(`Storages/item`, item).toPromise();
+    }
+
+    public async update(storage: StorageEditModel) {
+        await this.http.put(`Storages`, storage).toPromise();
     }
 
     public async delete(id: number) {

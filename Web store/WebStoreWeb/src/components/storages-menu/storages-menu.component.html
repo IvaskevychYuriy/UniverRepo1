@@ -1,7 +1,7 @@
 <div class="container">
   <h2 style="text-align: center">Storages menu</h2>
   <div class="col-sm-4" style="display: flex; flex-direction: column;">
-    <div class="col-sm-12" *ngIf="(storages && storages.length)">
+    <div class="col-sm-12" *ngIf="(storages && storages.length)" style="display: flex; justify-content: space-between;">
       <mat-form-field>
         <mat-select placeholder="Select storage" [(ngModel)]="selectedStorage.id" name="storage">
           <mat-option *ngFor="let storage of storages" [value]="storage.id" (click)="loadStorage(storage)">
@@ -9,28 +9,15 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <button mat-icon-button 
+        [disabled]="!(selectedStorage && selectedStorage.id)" 
+        [matTooltip]="editingStorage ? 'Cancel Edit' : 'Edit Storage'"
+        (click)="toggleEditStorage()">
+        <mat-icon>edit</mat-icon>
+      </button>
     </div>
     <div class="col-sm-12">
-      <div>
-        <h3>Add new Storage:</h3>
-        <form name="newStorageForm" (ngSubmit)="storageForm.form.valid && addNewStorage()" #storageForm="ngForm" novalidate>
-          <mat-form-field>
-            <label for="storageName">Name</label>
-            <input matInput type="text" class="form-control" name="storageName" [(ngModel)]="newStorage.name" #storageName="ngModel"
-              required/>
-            <mat-error>Name is required</mat-error>
-          </mat-form-field>    
-          <label>Location</label>
-          <agm-map class="map-new-location" [latitude]="initialMapCoords.latitude" [longitude]="initialMapCoords.longitude" (mapClick)="newStorageMapClicked($event)">
-            <agm-marker *ngIf="newStorage && newStorage.coordinates" [latitude]="newStorage.coordinates.latitude" [longitude]="newStorage.coordinates.longitude"></agm-marker>
-          </agm-map>
-          <div class="form-group">
-            <button mat-icon-button>
-              <span>Add</span>
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
-        </form>
+      <div *ngIf="editingStorage; then editStorageTemplate else addNewStorageTemplate">
       </div>
     </div>
     <div class="col-sm-12">
@@ -185,14 +172,61 @@
 </ng-template>
 
 <ng-template #selectedStorageLocationTemplate>
-    <h3 style="text-align: center">Location</h3>
-    <agm-map class="map-existing-location" [latitude]="selectedStorage.coordinates.latitude" [longitude]="selectedStorage.coordinates.longitude">
-      <agm-marker [latitude]="selectedStorage.coordinates.latitude" [longitude]="selectedStorage.coordinates.longitude"></agm-marker>
-    </agm-map>
-  </ng-template>
-  
-  <ng-template #noStorageLocationTemplate>
-    <div class="col-sm-12">
-      <h3 class="noitemslabel-container">No Location</h3>
-    </div>
-  </ng-template>
+  <h3 style="text-align: center">Location</h3>
+  <agm-map class="map-existing-location" [latitude]="selectedStorage.coordinates.latitude" [longitude]="selectedStorage.coordinates.longitude">
+    <agm-marker [latitude]="selectedStorage.coordinates.latitude" [longitude]="selectedStorage.coordinates.longitude"></agm-marker>
+  </agm-map>
+</ng-template>
+
+<ng-template #noStorageLocationTemplate>
+  <div class="col-sm-12">
+    <h3 class="noitemslabel-container">No Location</h3>
+  </div>
+</ng-template>
+
+<ng-template #addNewStorageTemplate>
+  <div>
+    <h3>Add new Storage:</h3>
+    <form name="newStorageForm" (ngSubmit)="storageForm.form.valid && addNewStorage()" #storageForm="ngForm" novalidate>
+      <mat-form-field>
+        <label for="storageName">Name</label>
+        <input matInput type="text" class="form-control" name="storageName" [(ngModel)]="newStorage.name" #storageName="ngModel"
+          required/>
+        <mat-error>Name is required</mat-error>
+      </mat-form-field>
+      <label>Location</label>
+      <agm-map class="map-new-location" [latitude]="initialMapCoords.latitude" [longitude]="initialMapCoords.longitude" (mapClick)="newStorageMapClicked($event)">
+        <agm-marker *ngIf="newStorage && newStorage.coordinates" [latitude]="newStorage.coordinates.latitude" [longitude]="newStorage.coordinates.longitude"></agm-marker>
+      </agm-map>
+      <div class="form-group">
+        <button mat-icon-button>
+          <span>Add</span>
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editStorageTemplate>
+  <div>
+    <h3>Edit '{{selectedStorage.name}}':</h3>
+    <form name="editStorageForm" (ngSubmit)="editStorageForm.form.valid && editStorage()" #editStorageForm="ngForm" novalidate>
+      <mat-form-field>
+        <label for="storageName">Name</label>
+        <input matInput type="text" class="form-control" name="storageName" [(ngModel)]="editingStorage.name" #storageName="ngModel" required/>
+        <mat-error>Name is required</mat-error>
+      </mat-form-field>
+      <label>Location</label>
+      <agm-map class="map-new-location" [latitude]="selectedStorage.coordinates.latitude" [longitude]="selectedStorage.coordinates.longitude" (mapClick)="storageMapClicked($event, editingStorage)">
+        <agm-marker [latitude]="editingStorage.coordinates.latitude" [longitude]="editingStorage.coordinates.longitude"></agm-marker>
+      </agm-map>
+      <div class="form-group">
+        <button mat-icon-button>
+          <span>Save</span>
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

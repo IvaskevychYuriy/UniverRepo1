@@ -14,6 +14,7 @@ import { DronesAddModel } from '../../models/drones-add-model';
 import { DroneStates } from '../../models/enumerations/drone-states';
 import { AddressCoordinates } from '../../models/address-coordinates';
 import { DronesService } from '../../services/drones.service';
+import { StorageEditModel } from '../../models/storage-edit-model';
 
 @Component({
   moduleId: module.id.toString(),
@@ -33,6 +34,8 @@ export class StoragesMenuComponent implements OnInit {
 
   private initialMapCoords: AddressCoordinates;
   private selectedStorage: Storage;
+  private editingStorage: StorageEditModel;
+
   private newStorage: Storage;
   private newStorageItem: StorageItem;
   private newDronesModel: DronesAddModel;
@@ -53,6 +56,7 @@ export class StoragesMenuComponent implements OnInit {
     };
     this.selectedStorage = new Storage();
     this.selectedStorage.id = 0;
+    this.editingStorage = null;
 
     this.newStorage = new Storage();
     this.newStorageItem = new StorageItem();
@@ -118,6 +122,10 @@ export class StoragesMenuComponent implements OnInit {
     this.newDronesModel.storageId = storage.id;
     this.dataSource = new StorageItemsDataSource(this.selectedStorage.items);
     this.dronesDataSource = new DronesDataSource(this.selectedStorage.drones);
+
+    if (this.editingStorage) {
+      this.editingStorage = this.mapToEditingStorageModel(this.selectedStorage);
+    }
   }
 
   private droneState(drone: Drone): string {
@@ -129,14 +137,18 @@ export class StoragesMenuComponent implements OnInit {
     return date ? new Date(date).toLocaleString() : "";
   }
   
-  private newStorageMapClicked(event: any) {
-    this.newStorage.coordinates = {
+  private storageMapClicked(event: any, storage: Storage | StorageEditModel) {
+    if (!storage) {
+      return;
+    }
+
+    storage.coordinates = {
       latitude: event.coords.lat,
       longitude: event.coords.lng
     };
   }
 
-  private async deleteItems(element: StorageItem) {
+  async deleteItems(element: StorageItem) {
     if (element.canDelete) {
       this.alert.info("Cannot delete item(s)");
       return;
@@ -152,7 +164,7 @@ export class StoragesMenuComponent implements OnInit {
     await this.loadStorage(this.selectedStorage);
   }
 
-  private async deleteDrone(drone: Drone) {
+  async deleteDrone(drone: Drone) {
     if (drone.state !== DroneStates.Available) {
       this.alert.info("Cannot delete non-available drone");
     }
@@ -165,6 +177,38 @@ export class StoragesMenuComponent implements OnInit {
     }
 
     await this.loadStorage(this.selectedStorage);
+  }
+
+  async toggleEditStorage() {
+    if (this.editingStorage) {
+      this.editingStorage = null;
+    } else {
+      this.editingStorage = this.mapToEditingStorageModel(this.selectedStorage);
+    }
+  } 
+
+  private mapToEditingStorageModel(storage: Storage): StorageEditModel {
+    return {
+      id: storage.id,
+      name: storage.name,
+      coordinates: storage.coordinates
+    };
+  }
+
+  async editStorage() {
+    if (!this.editingStorage) {
+      return;
+    }
+    
+    try {
+      await this.storagesService.update(this.editingStorage);
+      this.alert.info("Successfully updated selected storage");
+    } catch (e) {
+      this.alert.info("Couldn't edit selected storage");
+    }
+
+    await this.loadStorage(this.selectedStorage);
+    await this.fetchStorages();
   }
 }
 
