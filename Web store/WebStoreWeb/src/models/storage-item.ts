@@ -7,4 +7,5 @@ export class StorageItem {
 
     public productId: number;
     public productName: string;
+    public canDelete: boolean;
 }

@@ -12,5 +12,7 @@ namespace WebStore.Api.DataTransferObjects
 
         public int ProductId { get; set; }
         public string ProductName { get; set; }
+
+        public bool CanDelete { get; set; }
     }
 }

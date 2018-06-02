@@ -119,6 +119,18 @@
         <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.quantity}} </mat-cell>
       </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef style="max-width: 7%"> </mat-header-cell>
+        <mat-cell *matCellDef="let element" style="max-width: 7%"> 
+          <button mat-icon-button 
+            [disabled]="!element.canDelete" 
+            [matTooltip]="element.canDelete ? 'Delete item(s)' : 'Some items are ordered'"
+            (click)="deleteItems(element)">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
     </mat-table>
   </div>
 </ng-template>
@@ -150,6 +162,18 @@
         <mat-header-cell *matHeaderCellDef> Arrival </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{droneArrival(element)}} </mat-cell>
       </ng-container>
+
+      <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef style="max-width: 7%"> </mat-header-cell>
+          <mat-cell *matCellDef="let element" style="max-width: 7%"> 
+            <button mat-icon-button 
+              [disabled]="element.state !== 0" 
+              [matTooltip]="element.canDelete ? 'Delete drone' : 'Drone is non-available'"
+              (click)="deleteDrone(element)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
     </mat-table>
   </div>
 </ng-template>

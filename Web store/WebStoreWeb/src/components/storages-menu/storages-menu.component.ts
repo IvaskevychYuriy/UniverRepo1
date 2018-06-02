@@ -13,6 +13,7 @@ import { Drone } from '../../models/drone';
 import { DronesAddModel } from '../../models/drones-add-model';
 import { DroneStates } from '../../models/enumerations/drone-states';
 import { AddressCoordinates } from '../../models/address-coordinates';
+import { DronesService } from '../../services/drones.service';
 
 @Component({
   moduleId: module.id.toString(),
@@ -38,12 +39,13 @@ export class StoragesMenuComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private storagesService: StoragesService,
     private alert: AlertService,
-    private itemsService: ProductItemsService) {
+    private storagesService: StoragesService,
+    private itemsService: ProductItemsService,
+    private dronesService: DronesService) {
   
-    this.displayedColumns = ["name", "price", "quantity"];
-    this.dronesDisplayedColumns = ["id", "state", "arrivalTime"];
+    this.displayedColumns = ["name", "price", "quantity", "actions"];
+    this.dronesDisplayedColumns = ["id", "state", "arrivalTime", "actions"];
 
     this.initialMapCoords = {
       latitude: 51.5,
@@ -92,7 +94,7 @@ export class StoragesMenuComponent implements OnInit {
 
   async addNewDrones() {
     try {
-      await this.storagesService.addDrones(this.newDronesModel);
+      await this.dronesService.add(this.newDronesModel);
       this.alert.info("New drone(s) added");
     } catch (e) {
       this.alert.info("Couldn't add new drone(s)");
@@ -132,6 +134,37 @@ export class StoragesMenuComponent implements OnInit {
       latitude: event.coords.lat,
       longitude: event.coords.lng
     };
+  }
+
+  private async deleteItems(element: StorageItem) {
+    if (element.canDelete) {
+      this.alert.info("Cannot delete item(s)");
+      return;
+    }
+
+    try {
+      await this.storagesService.deleteItems(this.selectedStorage.id, element.productId);
+      this.alert.info("Item(s) successfully deleted");
+    } catch (e) {
+      this.alert.info("Couldn't delete item(s)");
+    }
+
+    await this.loadStorage(this.selectedStorage);
+  }
+
+  private async deleteDrone(drone: Drone) {
+    if (drone.state !== DroneStates.Available) {
+      this.alert.info("Cannot delete non-available drone");
+    }
+
+    try {
+      await this.dronesService.delete(drone.id);
+      this.alert.info("Drone successfully deleted");
+    } catch (e) {
+      this.alert.info("Couldn't delete drone");
+    }
+
+    await this.loadStorage(this.selectedStorage);
   }
 }
 

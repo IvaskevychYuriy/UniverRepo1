@@ -61,12 +61,20 @@ namespace WebStore.Api.Controllers
                 .Where(si => si.StorageId == id && si.State == StorageItemStates.Available)
                 .ToList()
                 .GroupBy(si => new { si.ProductId, si.Price })
-                .Join(_dbContext.ProductItems.AsNoTracking(), g => g.Key.ProductId, pi => pi.Id, (g, pi) => new { g, pi })
+                .Join(_dbContext.ProductItems
+                    .AsNoTracking()
+                    .Select(pi => new
+                    {
+                        Product = pi,
+                        AvailableCount = pi.StorageItems.Count() - pi.CartItems.Count()
+                    }), 
+                    g => g.Key.ProductId, x => x.Product.Id, (g, x) => new { g, x })
                 .Select(joined => new StorageGroupedItemModel()
                 {
                     ProductId = joined.g.Key.ProductId,
                     Price = joined.g.Key.Price,
-                    Product = joined.pi,
+                    Product = joined.x.Product,
+                    AvailableCount = joined.x.AvailableCount,
                     Quantity = joined.g.Count()
                 })
                 .ToList();
@@ -102,26 +110,6 @@ namespace WebStore.Api.Controllers
             return Ok();
         }
 
-        // POST api/<controller>/item
-        [Authorize(Roles = RoleNames.Admin)]
-        [HttpPost("drones")]
-        public async Task<IActionResult> PostDrones([FromBody]DronesAddModel model)
-        {
-            for (int i = 0; i < model.Quantity; ++i)
-            {
-                await _dbContext.Drones.AddAsync(new Drone()
-                {
-                    State = DroneStates.Available,
-                    ArrivalTime = null,
-                    StorageId = model.StorageId,
-                    CartItemId = null
-                });
-            }
-
-            await _dbContext.SaveChangesAsync();
-            return Ok();
-        }
-
         // DELETE api/<controller>/5
         [Authorize(Roles = RoleNames.Admin)]
         [HttpDelete("{id}")]
@@ -138,19 +126,34 @@ namespace WebStore.Api.Controllers
             return Ok();
         }
 
-        // DELETE api/<controller>/item/5
+        // DELETE api/<controller>/5/items?productId=2
         [Authorize(Roles = RoleNames.Admin)]
-        [HttpDelete("item/{id}")]
-        public async Task<IActionResult> DeleteItem(int id)
+        [HttpDelete("{id}/items")]
+        public async Task<IActionResult> DeleteItems(int id, int productId)
         {
-            var item = await _dbContext.StorageItems.FirstOrDefaultAsync(it => it.Id == id);
-            if (item == null)
+            var items = await _dbContext.StorageItems
+                .Where(si => si.StorageId == id && si.ProductId == productId && si.State == StorageItemStates.Available && si.CartItemId == null)
+                .ToListAsync();
+
+            var availableCount = await _dbContext.ProductItems
+                .AsNoTracking()
+                .Where(pi => pi.Id == productId)
+                .Select(pi => pi.StorageItems.Count() - pi.CartItems.Count())
+                .FirstOrDefaultAsync();
+
+            if (items == null || items.Count == 0)
+            {
+                return Ok();
+            }
+
+            if (items.Count > availableCount)
             {
                 return BadRequest();
             }
-
-            _dbContext.StorageItems.Remove(item);
+            
+            _dbContext.StorageItems.RemoveRange(items);
             await _dbContext.SaveChangesAsync();
+
             return Ok();
         }
     }

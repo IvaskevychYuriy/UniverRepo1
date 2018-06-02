@@ -26,7 +26,7 @@ export class ProductCategoriesService {
     }
 
     public async add(category: ProductCategory) {
-        await this.http.post<void>(`ProductCategories`, category).toPromise();
+        await this.http.post(`ProductCategories`, category).toPromise();
     }
 
     public async addSub(subCategory: ProductSubCategory) {

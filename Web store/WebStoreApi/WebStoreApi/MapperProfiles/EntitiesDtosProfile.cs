@@ -21,7 +21,8 @@ namespace WebStore.Api.MapperProfiles
                 .ForMember(dest => dest.Product, opt => opt.Ignore());
             CreateMap<OrderHistory, OrderHistoryDTO>();
             CreateMap<StorageGroupedItemModel, StorageItemDTO>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(dest => dest.CanDelete, opt => opt.MapFrom(src => src.AvailableCount >= src.Quantity));
             CreateMap<Storage, StorageListItemDTO>();
             CreateMap<StorageGroupedModel, StorageListItemDTO>();
             CreateMap<StorageGroupedModel, StorageDTO>()

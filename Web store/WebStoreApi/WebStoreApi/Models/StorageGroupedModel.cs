@@ -16,6 +16,7 @@ namespace WebStore.Api.Models
     public class StorageGroupedItemModel
     {
         public int ProductId { get; set; }
+        public int AvailableCount { get; set; }
         public ProductItem Product { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }

@@ -82,11 +82,33 @@ namespace WebStore.Api.Controllers
                 return BadRequest("invalid model state");
             }
 
-            var category = _mapper.Map<ProductItem>(productItem);
-            await _dbContext.ProductItems.AddAsync(category);
+            var product = _mapper.Map<ProductItem>(productItem);
+            await _dbContext.ProductItems.AddAsync(product);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(_mapper.Map<ProductItemDTO>(category));
+            return Ok(_mapper.Map<ProductItemDTO>(product));
+        }
+
+        // PUT: /ProductItems
+        [Authorize(Roles = RoleNames.Admin)]
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] ProductItemDTO productItem)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("invalid model state");
+            }
+
+            var product = _dbContext.ProductItems.FindAsync(productItem.Id);
+            if (product == null)
+            {
+                return BadRequest($"No such product with id = '{productItem.Id}'");
+            }
+
+            await _mapper.Map(productItem, product);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

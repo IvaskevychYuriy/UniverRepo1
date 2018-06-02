@@ -14,7 +14,7 @@ import { HttpOptionsInterceptor } from '../services/http-options.interceptor';
 import { AgmCoreModule } from '@agm/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule, MatMenuModule, MatListModule, MatInputModule, MatCardModule, MatPaginatorModule, MatSelectModule, MatOptionModule, MatTableModule, MatSnackBarModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatIconModule, MatGridListModule, MatMenuModule, MatListModule, MatInputModule, MatCardModule, MatPaginatorModule, MatSelectModule, MatOptionModule, MatTableModule, MatSnackBarModule, MatTooltipModule } from '@angular/material';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { ProductCellComponent } from '../components/product-grid/product-cell/product-cell.component';
 import { ProductGridComponent } from '../components/product-grid/product-grid.component';
@@ -31,6 +31,7 @@ import { StoragesService } from '../services/storages.service';
 import { ReportsComponent } from '../components/reports/reports.component';
 import { ReportsService } from '../services/reports.service';
 import { HangfireDashboardComponent } from '../components/hangfire-dashboard/hangfire-dashboard.component';
+import { DronesService } from '../services/drones.service';
 
 @NgModule({
   imports: [
@@ -51,6 +52,7 @@ import { HangfireDashboardComponent } from '../components/hangfire-dashboard/han
     MatTableModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatTooltipModule,
     AgmCoreModule.forRoot({
         apiKey: 'AIzaSyCR-t0z1E0rOcU1wy-wb3HTo2LagIdIkYM'
     }),
@@ -81,6 +83,7 @@ providers: [
     StoragesService,
     ReportsService,
     AlertService,
+    DronesService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpOptionsInterceptor, multi: true }
 ],
   bootstrap: [AppComponent]

@@ -49,6 +49,7 @@ export class ProductsMenuComponent implements OnInit {
     async addNewProduct() {
         try {
             await this.itemsService.add(this.newProduct);
+            this.alert.info(`Product successfully added`);
         } catch (e) {
             this.alert.info("Couldn't add new product");
         }
@@ -57,6 +58,7 @@ export class ProductsMenuComponent implements OnInit {
     async addNewCategory() {
         try {
             await this.categoriesService.add(this.newCategory);
+            this.alert.info(`Category successfully added`);
         } catch (e) {
             this.alert.info("Couldn't add new category");
         }
@@ -67,6 +69,7 @@ export class ProductsMenuComponent implements OnInit {
     async addNewSubCategory() {
         try {
             await this.categoriesService.addSub(this.newSubCategory);
+            this.alert.info(`Subcategory successfully added`);
         } catch (e) {
             this.alert.info("Couldn't add new subcategory");
         }

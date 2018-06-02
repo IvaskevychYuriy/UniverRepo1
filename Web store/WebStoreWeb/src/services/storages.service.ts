@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Storage } from '../models/storage';
 import { StorageItem } from '../models/storage-item';
-import { DronesAddModel } from '../models/drones-add-model';
 
 @Injectable()
 export class StoragesService {
@@ -25,16 +24,12 @@ export class StoragesService {
     public async addItem(item: StorageItem) {
         await this.http.post(`Storages/item`, item).toPromise();
     }
-    
-    public async addDrones(model: DronesAddModel) {
-        await this.http.post(`Storages/drones`, model).toPromise();
-    }
 
     public async delete(id: number) {
         await this.http.delete(`Storages/${id}`).toPromise();
     }
 
-    public async deleteItem(id: number) {
-        await this.http.delete(`Storages/item/${id}`).toPromise();
+    public async deleteItems(id: number, productId: number) {
+        await this.http.delete(`Storages/${id}/items?productId=${productId}`).toPromise();
     }
 }
