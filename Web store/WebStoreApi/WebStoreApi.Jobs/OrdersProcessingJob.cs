@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.DAL.Contexts;
+using WebStore.Models.Entities;
 using WebStore.Models.Enumerations;
 using WebStoreApi.Jobs.Helpers;
 using WebStoreApi.Jobs.Models;
@@ -50,7 +51,8 @@ namespace WebStoreApi.Jobs
                 .Where(o => orderIds.Contains(o.Id))
                 .Select(o => new
                 {
-                    Order = o,
+                    Id = o.Id,
+                    HistoryRecords = o.HistoryRecords.ToList(),
                     CartItems = o.CartItems
                         .Where(ci => ci.StorageItem == null)
                         .ToList()
@@ -73,6 +75,20 @@ namespace WebStoreApi.Jobs
                 .ToListAsync();
 
             var utcNow = DateTime.UtcNow;
+
+            for (int k = 0; k < data.OrdersCount; k++)
+            {
+                if (!orders[k].HistoryRecords.Any(h => h.State == OrderStates.Processing))
+                {
+                    await _dbContext.OrderHistories.AddAsync(new OrderHistory()
+                    {
+                        OrderId = orders[k].Id,
+                        State = OrderStates.Processing,
+                        StateChangeDate = utcNow
+                    });
+                }
+            }
+
             for (int i = 0; i < data.StoragesCount; i++)
             {
                 for (int j = 0; j < data.ProductsCount; j++)
@@ -95,7 +111,7 @@ namespace WebStoreApi.Jobs
                         var items = storages[i].Items
                             .Where(it => it.ProductId == info.ProductIds[j] && it.CartItemId == null)
                             .ToList();
-
+                        
                         for (int l = 0; l < result[index] && l < cartItems.Count && l < drones.Count && l < items.Count; ++l)
                         {
                             _dbContext.Entry(drones[l]).State = EntityState.Modified;
