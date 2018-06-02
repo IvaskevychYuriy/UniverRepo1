@@ -139,7 +139,7 @@ namespace WebStoreApi.Jobs
         {
             var ordersData = await _dbContext.Orders
                 .AsNoTracking()
-                .Where(o => o.HistoryRecords.Any(h => h.State != OrderStates.Done) && o.CartItems.Any(ci => ci.StorageItem == null))
+                .Where(o => !o.HistoryRecords.Any(h => h.State == OrderStates.Done) && o.CartItems.Any(ci => ci.StorageItem == null))
                 .Select(o => new
                 {
                     OrderId = o.Id,

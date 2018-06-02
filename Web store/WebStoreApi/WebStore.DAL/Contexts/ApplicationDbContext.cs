@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using WebStore.Models.Entities;
 
 namespace WebStore.DAL.Contexts
@@ -76,7 +77,7 @@ namespace WebStore.DAL.Contexts
                 b.ToTable("OrderHistory");
                 b.HasKey(oh => oh.Id);
                 b.Property(oh => oh.State).IsRequired();
-                b.Property(oh => oh.StateChangeDate).IsRequired().HasDefaultValueSql("GETDATE()");
+                b.Property(oh => oh.StateChangeDate).IsRequired().HasDefaultValueSql("GETDATE()").HasConversion(x => x, x => DateTime.SpecifyKind(x, DateTimeKind.Utc));
                 b.HasOne(oh => oh.Order).WithMany(o => o.HistoryRecords).HasForeignKey(oh => oh.OrderId);
             });
 
@@ -101,6 +102,7 @@ namespace WebStore.DAL.Contexts
             {
                 b.ToTable("Drone");
                 b.HasKey(e => e.Id);
+                b.Property(e => e.ArrivalTime).HasConversion(x => x, x => x.HasValue ? DateTime.SpecifyKind(x.Value, DateTimeKind.Utc) : (DateTime?)null);
                 b.HasOne(e => e.Storage).WithMany(e => e.Drones).HasForeignKey(e => e.StorageId);
             });
         }

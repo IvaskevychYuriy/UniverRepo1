@@ -28,7 +28,7 @@ namespace WebStoreApi.Jobs
                 .ToListAsync();
 
             var itemsToUpdate = await _dbContext.Orders
-                .Where(o => !doneIds.Contains(o.Id))
+                .Where(o => !doneIds.Contains(o.Id) && !o.HistoryRecords.Any(h => h.State == OrderStates.Done))
                 .ToListAsync();
 
             var utcNow = DateTime.UtcNow;

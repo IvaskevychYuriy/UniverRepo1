@@ -124,7 +124,7 @@ export class StoragesMenuComponent implements OnInit {
 
   private droneArrival(drone: Drone): string {
     const date = drone.arrivalTime;
-    return date ? date.toLocaleDateString() : "";
+    return date ? new Date(date).toLocaleString() : "";
   }
   
   private newStorageMapClicked(event: any) {

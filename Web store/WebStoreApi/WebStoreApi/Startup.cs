@@ -99,7 +99,7 @@ namespace WebStore.Api
                 cfg.AllowCredentials();
                 cfg.AllowAnyMethod();
                 cfg.AllowAnyHeader();
-                cfg.WithOrigins("http://localhost:4200");
+                cfg.WithOrigins("http://localhost:4200", "http://localhost:5000");
             });
             
             app.UseHangfireDashboard("/jobs", new DashboardOptions()
