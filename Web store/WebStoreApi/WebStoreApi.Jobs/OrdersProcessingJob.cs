@@ -85,7 +85,7 @@ namespace WebStoreApi.Jobs
                             continue;
                         }
 
-                        var arrivalTime = utcNow.AddSeconds(info.Orders[k].Coordinates.Distance(info.Storages[i].Coordinates));
+                        var arrivalTime = utcNow.AddSeconds(info.Orders[k].Coordinates.Distance(info.Storages[i].Coordinates) * 2); // 1 km/s twice the distance
                         var cartItems = orders[k].CartItems
                             .Where(ci => ci.ProductId == info.ProductIds[j] && ci.Drone == null && ci.StorageItem == null)
                             .ToList();
@@ -96,7 +96,7 @@ namespace WebStoreApi.Jobs
                             .Where(it => it.ProductId == info.ProductIds[j] && it.CartItemId == null)
                             .ToList();
 
-                        for (int l = 0; l < result[index]; ++l)
+                        for (int l = 0; l < result[index] && l < cartItems.Count && l < drones.Count && l < items.Count; ++l)
                         {
                             _dbContext.Entry(drones[l]).State = EntityState.Modified;
                             _dbContext.Entry(cartItems[l]).State = EntityState.Modified;

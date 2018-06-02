@@ -13,6 +13,8 @@ using AutoMapper;
 using Hangfire;
 using Hangfire.AspNetCore;
 using WebStore.Api.Helpers;
+using WebStore.Api.Constants;
+using WebStoreApi.Jobs;
 
 namespace WebStore.Api
 {
@@ -115,6 +117,14 @@ namespace WebStore.Api
                     name: "default",
                     template: "{controller}/{action}/{id?}");
             });
+
+            LaunchJobs();
+        }
+
+        private void LaunchJobs()
+        {
+            RecurringJob.AddOrUpdate<DronesUpdateSimulatorJob>(JobIds.DronesArrivalCheckerJob, job => job.UpdateDronesStates(), Cron.Minutely());
+            RecurringJob.AddOrUpdate<OrdersProcessingJob>(JobIds.OrdersProcessingJob, job => job.ProcessOrders(), Cron.MinuteInterval(2));
         }
     }
 }
