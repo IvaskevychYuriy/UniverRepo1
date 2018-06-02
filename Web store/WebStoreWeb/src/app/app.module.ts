@@ -32,6 +32,7 @@ import { ReportsComponent } from '../components/reports/reports.component';
 import { ReportsService } from '../services/reports.service';
 import { HangfireDashboardComponent } from '../components/hangfire-dashboard/hangfire-dashboard.component';
 import { DronesService } from '../services/drones.service';
+import { ProductPageComponent } from '../components/product-page/product-page.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ declarations: [
     ShoppingCartComponent,
     StoragesMenuComponent,
     ReportsComponent,
-    HangfireDashboardComponent
+    HangfireDashboardComponent,
+    ProductPageComponent
 ],
 providers: [
     AuthGuard,

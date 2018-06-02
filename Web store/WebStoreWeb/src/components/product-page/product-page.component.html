@@ -1,0 +1,54 @@
+<div *ngIf="product && product.id; then loaded else loading">
+</div>
+
+<ng-template #loaded>
+  <div class="product container">
+    <h1 class="text-centered">{{product.name}}</h1>
+
+    <div class="pic-buy-container">
+      <figure>
+        <img src="{{product.pictureUrl}}" alt="{{product.name}}">
+      </figure>
+
+      <div class="full-width-container">
+          <div *ngIf="product.availableCount >= 1; then available else notAvailable" class="full-width-container">
+          </div>
+      </div>
+    </div>
+
+    <h3>Details</h3>
+
+    <section>
+      <p>{{product.description}}</p>
+    </section>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <h1 class="loading-label text-centered">Loading...</h1>
+</ng-template>
+
+<ng-template #available>
+  <h2 style="text-align: right;">Order now</h2>
+  <h4 style="text-align: right;">Only {{product.price}}$</h4>
+  <div class="add-to-cart-container">
+    <form id="addToCartForm" name="addToCartForm" (ngSubmit)="addToCartForm.form.valid && addToCart()" #addToCartForm="ngForm" novalidate>
+      <mat-form-field>
+        <label for="orderQuantity">Quantity</label>
+        <input matInput type="number" min="1" class="form-control" name="orderQuantity" [(ngModel)]="buyAmount" #orderQuantity="ngModel"
+          required/>
+        <mat-error>Quantity is required</mat-error>
+      </mat-form-field>
+      <div class="form-group">
+        <button mat-icon-button>
+          <span>Add</span>
+          <mat-icon>add_shopping_cart</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #notAvailable>
+  <h2 class="no-items-left-label text-centered">No items left</h2>
+</ng-template>

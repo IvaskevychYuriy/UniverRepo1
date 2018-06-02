@@ -1,0 +1,45 @@
+figure img {
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.pic-buy-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.full-width-container {
+    width: 100%;
+}
+
+.no-items-left-label {
+    color: grey;
+    font-weight: 500;
+}
+
+.buy-amount {
+    width: 20em;
+    margin-right: 0.5em;
+}
+
+button {
+    margin-left: -0.2em;
+}
+
+button mat-icon {
+    margin-left: -0.2em;
+}
+
+.add-to-cart-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+form mat-form-field {
+    width: 100%;
+}
+
+#addToCartForm {
+    width: 30em;
+    margin-top: 4em;
+}

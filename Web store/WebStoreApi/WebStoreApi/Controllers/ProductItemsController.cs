@@ -63,7 +63,11 @@ namespace WebStore.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _dbContext.ProductItems.FirstOrDefaultAsync(pi => pi.Active && pi.Id == id);
+            var result = await _dbContext.ProductItems
+                .AsNoTracking()
+                .Include(pi => pi.CartItems)
+                .Include(pi => pi.StorageItems)
+                .FirstOrDefaultAsync(pi => pi.Active && pi.Id == id);
             if (result == null)
             {
                 return BadRequest($"No such active product category with id = '{id}'");

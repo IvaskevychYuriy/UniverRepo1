@@ -1,6 +1,6 @@
 <mat-card class="list-content">
     <img src="{{product.pictureUrl}}" alt="{{product.name}}">
-    <h3>{{product.name}}</h3>
+    <a [routerLink]="['/item', product.id]"><h3>{{product.name}}</h3></a>
     <p class="product-description-small">{{product.description}}</p>
     <div *ngIf="product.availableCount >= 1; then available else notAvailable"></div>
     <button mat-icon-button *ngIf="authService.isInRole('Administrator')"
@@ -14,7 +14,7 @@
 
 <ng-template #available>
     <div class="add-to-cart-container">
-        <input matInput [(ngModel)]="buyAmount" type="number" min="1" max="{{product.avalaibleCount}}" class="buy-amount" required/>
+        <input matInput [(ngModel)]="buyAmount" type="number" min="1" [max]="product.availableCount" class="buy-amount" required/>
         <button mat-icon-button (click)="addToCart()">
             <span>Add</span>
             <mat-icon>add_shopping_cart</mat-icon>

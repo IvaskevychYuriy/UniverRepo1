@@ -11,12 +11,12 @@
 
 <mat-nav-list *ngFor="let category of categories" class="list">
     <mat-list-item class="item" routerLinkActive="active-link">
-        <a [routerLink]="['/home']" [queryParams]="{ categoryId: category.id }" >
+        <a [routerLink]="['/home']" [queryParams]="{ categoryId: category.id }">
             {{ category.name }}
         </a>
     </mat-list-item>
     <mat-list-item class="sub-item" *ngFor="let subCategory of category.subCategories" routerLinkActive="active-link">
-        <a [routerLink]="['/home']" [queryParams]="{ subCategoryId: subCategory.id }" >
+        <a [routerLink]="['/home']" [queryParams]="{ subCategoryId: subCategory.id }">
             {{ subCategory.name }}
         </a>
     </mat-list-item>

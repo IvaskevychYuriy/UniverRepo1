@@ -9,10 +9,12 @@ import { OrderHistoryComponent } from '../components/order-history/order-history
 import { StoragesMenuComponent } from '../components/storages-menu/storages-menu.component';
 import { ReportsComponent } from '../components/reports/reports.component';
 import { HangfireDashboardComponent } from '../components/hangfire-dashboard/hangfire-dashboard.component';
+import { ProductPageComponent } from '../components/product-page/product-page.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'cart', component: ShoppingCartComponent },
+    { path: 'item/:id', component: ProductPageComponent },
     { path: 'orders', component: OrderHistoryComponent, canActivate: [AuthGuard] },
     { path: 'products', component: ProductsMenuComponent, canActivate: [AuthGuard] },
     { path: 'storages', component: StoragesMenuComponent, canActivate: [AuthGuard] },
