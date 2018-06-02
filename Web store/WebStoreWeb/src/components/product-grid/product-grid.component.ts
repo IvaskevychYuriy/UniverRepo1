@@ -47,9 +47,28 @@ export class ProductGridComponent implements OnInit, OnDestroy {
         this.currentPage = Math.max(queryParams["page"] || 1, 1);
 
         try {
-            this.pageData = await this.productsService.fetchItems(this.categoryId, this.subCategoryId, this.itemsPerPage, this.currentPage)
+            await this.reloadData();
         } catch (e) {
             this.alert.info("Could not fetch items, please try again later");
         }
+    }
+
+    private async reloadData() {
+        this.pageData = await this.productsService.fetchItems(this.categoryId, this.subCategoryId, this.itemsPerPage, this.currentPage)
+    }
+
+    async deleteProduct(product: ProductItem) {
+        if (!product || !product.id || product.availableCount < 1) {
+            return;
+        }
+
+        try {
+            await this.productsService.delete(product.id);
+            this.alert.info("Product successfully deleted");
+        } catch (e) {
+            this.alert.info("Couldn't delete product");
+        }
+        
+        await this.reloadData();
     }
 }

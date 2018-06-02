@@ -42,4 +42,10 @@ export class AuthenticationService {
         return this.http.post('account/logout', null)
             .toPromise();
     }
+    
+    isInRole(role: string): boolean {
+        return this.userProfile 
+            && this.userProfile.roleNames
+            && this.userProfile.roleNames.indexOf(role) !== -1;
+    }
 }

@@ -4,7 +4,7 @@
     </div>
     <ul class="list">
         <li *ngFor="let product of pageData.productItems">
-            <product-cell [product]="product" class="list-item"></product-cell>
+            <product-cell [product]="product" (itemDeleted)="deleteProduct($event)" class="list-item"></product-cell>
         </li>
     </ul>
     <div *ngIf="anyItemsOnPage" class="grid-footerpager-container">

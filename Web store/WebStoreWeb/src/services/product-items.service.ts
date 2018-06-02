@@ -20,4 +20,8 @@ export class ProductItemsService {
     public async add(item: ProductItem): Promise<ProductItem> {
         return await this.http.post<ProductItem>(`ProductItems`, item).toPromise();
     }
+    
+    public async delete(id: number) {
+        await this.http.delete(`ProductItems/${id}`).toPromise();
+    }
 }

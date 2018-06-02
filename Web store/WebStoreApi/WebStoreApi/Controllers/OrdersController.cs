@@ -72,7 +72,7 @@ namespace WebStore.Api.Controllers
             var ids = orderDto.CartItems.Select(ci => ci.Product.Id).ToList();
             var items = await _dbContext.ProductItems
                 .AsNoTracking()
-                .Where(pi => ids.Contains(pi.Id))
+                .Where(pi => pi.Active && ids.Contains(pi.Id))
                 .Select(pi => new
                 {
                     Price = pi.Price,
@@ -129,7 +129,7 @@ namespace WebStore.Api.Controllers
             var ids = orderDto.CartItems.Select(ci => ci.Product.Id).ToList();
             var items = await _dbContext.ProductItems
                 .AsNoTracking()
-                .Where(pi => ids.Contains(pi.Id))
+                .Where(pi => pi.Active && ids.Contains(pi.Id))
                 .OrderBy(pi => pi.Id)
                 .Select(pi => new
                 {

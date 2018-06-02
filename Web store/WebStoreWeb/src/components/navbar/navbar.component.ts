@@ -74,10 +74,4 @@ export class NavbarComponent {
             }
         });
     }
-
-    isInRole(role: string): boolean {
-        return this.authService.userProfile 
-            && this.authService.userProfile.roleNames
-            && this.authService.userProfile.roleNames.indexOf(role) !== -1;
-    }
 }

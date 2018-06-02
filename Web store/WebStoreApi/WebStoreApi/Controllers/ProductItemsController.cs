@@ -31,7 +31,7 @@ namespace WebStore.Api.Controllers
         [HttpGet("Get")]
         public async Task<IActionResult> Get(int? categoryId = null, int? subCategoryId = null, int? pageSize = null, int page = 1)
         {
-            var result = _dbContext.ProductItems.AsQueryable();
+            var result = _dbContext.ProductItems.Where(pi => pi.Active);
             if (subCategoryId != null)
             {
                 result = result.Where(pi => pi.SubCategoryId == subCategoryId);
@@ -63,10 +63,10 @@ namespace WebStore.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _dbContext.ProductItems.FirstOrDefaultAsync(pi => pi.Id == id);
+            var result = await _dbContext.ProductItems.FirstOrDefaultAsync(pi => pi.Active && pi.Id == id);
             if (result == null)
             {
-                return BadRequest($"No such product category with id = '{id}'");
+                return BadRequest($"No such active product category with id = '{id}'");
             }
 
             return Ok(_mapper.Map<ProductItemDTO>(result));
@@ -83,6 +83,7 @@ namespace WebStore.Api.Controllers
             }
 
             var product = _mapper.Map<ProductItem>(productItem);
+            product.Active = true;
             await _dbContext.ProductItems.AddAsync(product);
             await _dbContext.SaveChangesAsync();
 
@@ -99,13 +100,30 @@ namespace WebStore.Api.Controllers
                 return BadRequest("invalid model state");
             }
 
-            var product = _dbContext.ProductItems.FindAsync(productItem.Id);
+            var product = await _dbContext.ProductItems.FirstOrDefaultAsync(pi => pi.Active && pi.Id == productItem.Id);
             if (product == null)
             {
-                return BadRequest($"No such product with id = '{productItem.Id}'");
+                return BadRequest($"No such active product with id = '{productItem.Id}'");
             }
 
-            await _mapper.Map(productItem, product);
+            _mapper.Map(productItem, product);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        // DELETE: /ProductItems/5
+        [Authorize(Roles = RoleNames.Admin)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _dbContext.ProductItems.FindAsync(id);
+            if (product == null || !product.Active)
+            {
+                return BadRequest($"No such active product with id = '{id}'");
+            }
+
+            product.Active = false;
             await _dbContext.SaveChangesAsync();
 
             return Ok();

@@ -45,6 +45,7 @@ namespace WebStore.DAL.Contexts
             {
                 b.ToTable("ProductItem");
                 b.HasKey(pi => pi.Id);
+                b.Property(pi => pi.Active).HasDefaultValue(true);
                 b.Property(pi => pi.Name).IsRequired().HasMaxLength(200);
                 b.Property(pi => pi.Price).IsRequired();
                 b.Property(pi => pi.Description).IsRequired(false);
