@@ -8,6 +8,6 @@
         </li>
     </ul>
     <div *ngIf="anyItemsOnPage" class="grid-footerpager-container">
-        <mat-paginator [length]="pageData.totalCount" [pageSize]="itemsPerPage" ></mat-paginator>
+        <mat-paginator [length]="pageData.totalCount" [pageSize]="itemsPerPage" (page)="pageChanged($event)" ></mat-paginator>
     </div>
 </div>

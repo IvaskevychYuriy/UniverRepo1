@@ -5,6 +5,7 @@ import { ProductItemsService } from '../../services/product-items.service';
 import { Subscription } from 'rxjs';
 import { PageData } from '../../models/page-data';
 import { AlertService } from '../../services/alert.service';
+import { PageEvent } from '@angular/material';
 
 @Component({
     moduleId: module.id.toString(),
@@ -14,7 +15,7 @@ import { AlertService } from '../../services/alert.service';
 })
 export class ProductGridComponent implements OnInit, OnDestroy {
     private pageData: PageData;
-    private itemsPerPage: number = 12;
+    private itemsPerPage: number = 10;
     private currentPage: number = 1;
     private categoryId: number;
     private subCategoryId: number;
@@ -69,6 +70,11 @@ export class ProductGridComponent implements OnInit, OnDestroy {
             this.alert.info("Couldn't delete product");
         }
         
+        await this.reloadData();
+    }
+
+    async pageChanged(event: PageEvent) {
+        this.currentPage = event.pageIndex + 1;
         await this.reloadData();
     }
 }

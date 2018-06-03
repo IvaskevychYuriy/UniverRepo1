@@ -155,7 +155,7 @@
           <mat-cell *matCellDef="let element" style="max-width: 7%"> 
             <button mat-icon-button 
               [disabled]="element.state !== 0" 
-              [matTooltip]="element.canDelete ? 'Delete drone' : 'Drone is non-available'"
+              [matTooltip]="element.state === 0 ? 'Delete drone' : 'Drone is non-available'"
               (click)="deleteDrone(element)">
               <mat-icon>delete_forever</mat-icon>
             </button>
@@ -195,7 +195,7 @@
         <mat-error>Name is required</mat-error>
       </mat-form-field>
       <label>Location</label>
-      <agm-map class="map-new-location" [latitude]="initialMapCoords.latitude" [longitude]="initialMapCoords.longitude" (mapClick)="newStorageMapClicked($event)">
+      <agm-map class="map-new-location" [latitude]="initialMapCoords.latitude" [longitude]="initialMapCoords.longitude" (mapClick)="storageMapClicked($event, newStorage)">
         <agm-marker *ngIf="newStorage && newStorage.coordinates" [latitude]="newStorage.coordinates.latitude" [longitude]="newStorage.coordinates.longitude"></agm-marker>
       </agm-map>
       <div class="form-group">
