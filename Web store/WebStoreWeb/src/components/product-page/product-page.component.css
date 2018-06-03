@@ -43,3 +43,9 @@ form mat-form-field {
     width: 30em;
     margin-top: 4em;
 }
+
+.edit-button {
+    position: absolute;
+    right: 0;
+    top: 20px;
+}

@@ -35,6 +35,7 @@ namespace WebStore.Api.MapperProfiles
             CreateMap<ProductCategoryDTO, ProductCategory>();
             CreateMap<ProductSubCategoryDTO, ProductSubCategory>();
             CreateMap<ProductItemDTO, ProductItem>();
+            CreateMap<ProductItemEditModel, ProductItem>();
             CreateMap<CartItemDTO, CartItem>();
             CreateMap<OrderDTO, Order>();
             CreateMap<OrderHistoryDTO, OrderHistory>();

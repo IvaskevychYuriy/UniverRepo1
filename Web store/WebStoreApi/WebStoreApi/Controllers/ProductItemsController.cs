@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Api.Constants;
 using WebStore.Api.DataTransferObjects;
+using WebStore.Api.Models;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
 
@@ -97,7 +98,7 @@ namespace WebStore.Api.Controllers
         // PUT: /ProductItems
         [Authorize(Roles = RoleNames.Admin)]
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] ProductItemDTO productItem)
+        public async Task<IActionResult> Put([FromBody] ProductItemEditModel productItem)
         {
             if (!ModelState.IsValid)
             {

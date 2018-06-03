@@ -1,7 +1,18 @@
-<div *ngIf="product && product.id; then loaded else loading">
+<div style="position: relative">
+  <button mat-icon-button *ngIf="authService.isInRole('Administrator')" class="edit-button" [disabled]="!(product && product.id)"
+    [matTooltip]="editModel ? 'Cancel Edit' : 'Edit Product'" (click)="toggleEditMode()">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <div *ngIf="product && product.id; then loaded else loading">
+  </div>
 </div>
 
 <ng-template #loaded>
+  <div *ngIf="editModel && editModel.id; then editProduct else showProduct">
+  </div>
+</ng-template>
+
+<ng-template #showProduct>
   <div class="product container">
     <h1 class="text-centered">{{product.name}}</h1>
 
@@ -11,8 +22,8 @@
       </figure>
 
       <div class="full-width-container">
-          <div *ngIf="product.availableCount >= 1; then available else notAvailable" class="full-width-container">
-          </div>
+        <div *ngIf="product.availableCount >= 1; then available else notAvailable" class="full-width-container">
+        </div>
       </div>
     </div>
 
@@ -24,6 +35,40 @@
   </div>
 </ng-template>
 
+<ng-template #editProduct>
+  <div class="product container">
+    <h1 class="text-centered">{{editModel.name}}</h1>
+
+    <form name="editProductForm" (ngSubmit)="editProductForm.form.valid && editProductItem()" #editProductForm="ngForm" novalidate>
+      <mat-form-field>
+        <label for="name">Name</label>
+        <input matInput type="text" class="form-control" name="name" [(ngModel)]="editModel.name" #name="ngModel" required />
+        <mat-error>Name is required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <label for="picture">Picture url</label>
+        <input matInput type="text" class="form-control" name="picture" [(ngModel)]="editModel.pictureUrl" #picture="ngModel" />
+      </mat-form-field>
+      <mat-form-field>
+        <label for="description">Description</label>
+        <textarea matInput rows="10" class="form-control" name="description" [(ngModel)]="editModel.description" #description="ngModel"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <label for="price">Price</label>
+        <input matInput type="number" min="1" class="form-control" name="price" [(ngModel)]="editModel.price" #price="ngModel" required/>
+        <mat-error>Price is required</mat-error>
+      </mat-form-field>
+      <div class="form-group">
+        <button mat-icon-button>
+          <span>Save</span>
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</ng-template>
+
 <ng-template #loading>
   <h1 class="loading-label text-centered">Loading...</h1>
 </ng-template>
@@ -32,11 +77,12 @@
   <h2 style="text-align: right;">Order now</h2>
   <h4 style="text-align: right;">Only {{product.price}}$</h4>
   <div class="add-to-cart-container">
-    <form id="addToCartForm" name="addToCartForm" (ngSubmit)="addToCartForm.form.valid && addToCart()" #addToCartForm="ngForm" novalidate>
+    <form id="addToCartForm" name="addToCartForm" (ngSubmit)="addToCartForm.form.valid && addToCart()" #addToCartForm="ngForm"
+      novalidate>
       <mat-form-field>
         <label for="orderQuantity">Quantity</label>
-        <input matInput type="number" min="1" class="form-control" name="orderQuantity" [(ngModel)]="buyAmount" #orderQuantity="ngModel"
-          required/>
+        <input matInput type="number" min="1" [max]="product.availableCount" class="form-control" name="orderQuantity" [(ngModel)]="buyAmount"
+          #orderQuantity="ngModel" required/>
         <mat-error>Quantity is required</mat-error>
       </mat-form-field>
       <div class="form-group">
