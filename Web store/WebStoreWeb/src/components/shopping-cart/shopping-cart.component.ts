@@ -6,7 +6,7 @@ import { Order } from '../../models/order';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
 import { AddressCoordinates } from '../../models/address-coordinates';
 
@@ -115,7 +115,7 @@ class OrderProductsDataSource extends DataSource<CartItem> {
     }
 
     connect(collectionViewer: CollectionViewer): Observable<CartItem[]> {
-        return Observable.of(this.order.cartItems);
+        return of(this.order.cartItems);
     }
 
     disconnect(collectionViewer: CollectionViewer): void {

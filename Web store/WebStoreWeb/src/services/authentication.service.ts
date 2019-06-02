@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { LoginInfo } from '../models/login-info';
 import { UserProfile } from '../models/user-profile';
 import { HttpClient } from '@angular/common/http';
@@ -21,18 +21,18 @@ export class AuthenticationService {
 
     login(model: LoginInfo) {
         return this.http.post('account/login', JSON.stringify(model))
-            .map((response) => {
+            .pipe(map((response) => {
                 this._userProfile = response as UserProfile;
                 localStorage.setItem('currentUser', JSON.stringify(this._userProfile));
-            });
+            }));
     }
     
     register(model: LoginInfo) {
         return this.http.post('account/register', JSON.stringify(model))
-            .map((response) => {
+            .pipe(map((response) => {
                 this._userProfile = response as UserProfile;
                 localStorage.setItem('currentUser', JSON.stringify(this._userProfile));
-            });
+            }));
     }
 
     logout() {

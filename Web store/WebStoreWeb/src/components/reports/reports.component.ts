@@ -4,7 +4,7 @@ import { ProductItemReport } from '../../models/product-item-report';
 import { ReportsService } from '../../services/reports.service';
 import { DataSource } from '@angular/cdk/table';
 import { CollectionViewer } from '@angular/cdk/collections';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'reports',
@@ -42,7 +42,7 @@ class ItemsReportsDataSource extends DataSource<ProductItemReport> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<ProductItemReport[]> {
-      return Observable.of(this.reports);
+      return of(this.reports);
   }
 
   disconnect(collectionViewer: CollectionViewer): void {

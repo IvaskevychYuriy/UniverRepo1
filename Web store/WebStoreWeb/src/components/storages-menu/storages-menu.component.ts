@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { ProductItemsService } from '../../services/product-items.service';
 import { ProductItem } from '../../models/product-item';
 import { StorageItem } from '../../models/storage-item';
@@ -221,7 +222,7 @@ class StorageItemsDataSource extends DataSource<StorageItem> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<StorageItem[]> {
-      return Observable.of(this.storageItems);
+      return of(this.storageItems);
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
@@ -237,7 +238,7 @@ class DronesDataSource extends DataSource<Drone> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<Drone[]> {
-      return Observable.of(this.drones);
+      return of(this.drones);
   }
 
   disconnect(collectionViewer: CollectionViewer): void {

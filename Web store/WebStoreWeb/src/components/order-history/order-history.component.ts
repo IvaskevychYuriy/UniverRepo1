@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { OrderStates } from '../../models/enumerations/order-states';
 
 @Component({
@@ -52,7 +52,7 @@ class OrdersDataSource extends DataSource<Order> {
     }
 
     connect(collectionViewer: CollectionViewer): Observable<Order[]> {
-        return Observable.of(this.orders);
+        return of(this.orders);
     }
 
     disconnect(collectionViewer: CollectionViewer): void {

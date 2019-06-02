@@ -16,7 +16,6 @@
     <div class="add-to-cart-container">
         <input matInput [(ngModel)]="buyAmount" type="number" min="1" [max]="product.availableCount" class="buy-amount" required/>
         <button mat-icon-button (click)="addToCart()">
-            <span>Add</span>
             <mat-icon>add_shopping_cart</mat-icon>
         </button>
     </div>

@@ -1,4 +1,4 @@
-import 'rxjs/add/operator/toPromise';
+
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { DronesAddModel } from '../models/drones-add-model';
