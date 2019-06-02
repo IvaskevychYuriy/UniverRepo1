@@ -61,7 +61,8 @@ export class ProductPageComponent implements OnInit, OnDestroy {
         name: this.product.name,
         price: this.product.price,
         pictureUrl: this.product.pictureUrl,
-        description: this.product.description
+        description: this.product.description,
+        weight: this.product.weight
       };
     }
   }

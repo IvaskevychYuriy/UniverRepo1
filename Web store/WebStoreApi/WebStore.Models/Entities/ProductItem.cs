@@ -14,7 +14,8 @@ namespace WebStore.Models.Entities
 
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public string PictureUrl { get; set; }
+        public float Weight { get; set; }
+		public string PictureUrl { get; set; }
         public string Description { get; set; }
         
         public int SubCategoryId { get; set; }

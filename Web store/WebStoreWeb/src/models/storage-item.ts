@@ -2,6 +2,7 @@ export class StorageItem {
     public id: number;
     public price: number;
     public quantity: number;
+    public weight: number;
 
     public storageId: number;
 

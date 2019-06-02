@@ -71,6 +71,11 @@
                     <input matInput type="number" min="1" class="form-control" name="price" [(ngModel)]="newProduct.price" #price="ngModel" required/>
                     <mat-error>Price is required</mat-error>
                 </mat-form-field>
+                <mat-form-field>
+                    <label for="weight">Weight</label>
+                    <input matInput type="number" min="0" class="form-control" name="weight" [(ngModel)]="newProduct.weight" #price="ngModel" required/>
+                    <mat-error>Weight is required</mat-error>
+                </mat-form-field>
             <div class="form-group">
                 <button mat-icon-button>
                     <span>Add</span>

@@ -59,6 +59,7 @@ namespace WebStore.Api.Controllers
             result.Items = _dbContext.StorageItems
                 .AsNoTracking()
                 .Where(si => si.StorageId == id && si.State == StorageItemStates.Available)
+				.OrderBy(si => si.ProductItem.Name)
                 .ToList()
                 .GroupBy(si => new { si.ProductId, si.Price })
                 .Join(_dbContext.ProductItems
@@ -74,6 +75,7 @@ namespace WebStore.Api.Controllers
                     ProductId = joined.g.Key.ProductId,
                     Price = joined.g.Key.Price,
                     Product = joined.x.Product,
+					Weight = joined.x.Product.Weight,
                     AvailableCount = joined.x.AvailableCount,
                     Quantity = joined.g.Count()
                 })
@@ -87,6 +89,11 @@ namespace WebStore.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]StorageListItemDTO value)
         {
+			if (_dbContext.Storages.Count() > 1)
+			{
+				return BadRequest("Storage already exists");
+			}
+
             var storage = _mapper.Map<Storage>(value);
             await _dbContext.Storages.AddAsync(storage);
             await _dbContext.SaveChangesAsync();

@@ -1,13 +1,10 @@
-<!-- <ul class="navbar-content-container">
-    <li *ngFor="let category of categories">
-        <span (click)="selectCategory(category)">{{category.name}}</span>
-        <ul class="navbar-sub-content-container">
-            <li *ngFor="let subCategory of category.subCategories" (click)="selectSubCategory(subCategory)">
-                <span>{{subCategory.name}}</span>
-            </li>
-        </ul>
-    </li>
-</ul> -->
+<mat-nav-list class="list">
+    <mat-list-item class="item" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+        <a [routerLink]="['/home']">
+            All Products
+        </a>
+    </mat-list-item>
+</mat-nav-list>
 
 <mat-nav-list *ngFor="let category of categories" class="list">
     <mat-list-item class="item" routerLinkActive="active-link">

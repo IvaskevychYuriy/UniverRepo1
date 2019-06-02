@@ -10,7 +10,8 @@ namespace WebStore.Api.DataTransferObjects
 
         public DroneStates State { get; set; }
         public DateTime? ArrivalTime { get; set; }
-        
-        public int? CartItemId { get; set; }
+		public float MaxWeight { get; set; }
+
+		public int? CartItemId { get; set; }
     }
 }

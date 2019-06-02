@@ -4,5 +4,6 @@
     {
         public int StorageId { get; set; }
         public int Quantity { get; set; }
-    }
+        public float MaxWeight { get; set; }
+	}
 }

@@ -48,8 +48,8 @@ export class StoragesMenuComponent implements OnInit {
     private itemsService: ProductItemsService,
     private dronesService: DronesService) {
   
-    this.displayedColumns = ["name", "price", "quantity", "actions"];
-    this.dronesDisplayedColumns = ["id", "state", "arrivalTime", "actions"];
+    this.displayedColumns = ["name", "price", "quantity", "weight", "actions"];
+    this.dronesDisplayedColumns = ["state", "arrivalTime", "weight", "actions"];
 
     this.initialMapCoords = {
       latitude: 51.5,
@@ -110,6 +110,10 @@ export class StoragesMenuComponent implements OnInit {
 
   private async fetchStorages() {
     this.storages = await this.storagesService.storages();
+    if (this.storages && this.storages.length) {
+      this.selectedStorage = this.storages[0];
+      await this.loadStorage(this.selectedStorage);
+    }
   }
 
   private async fetchProducts() {

@@ -33,9 +33,10 @@ namespace WebStore.Api.Controllers
         {
             for (int i = 0; i < model.Quantity; ++i)
             {
-                await _dbContext.Drones.AddAsync(new Drone()
-                {
-                    State = DroneStates.Available,
+				await _dbContext.Drones.AddAsync(new Drone()
+				{
+					State = DroneStates.Available,
+					MaxWeight = model.MaxWeight,
                     ArrivalTime = null,
                     StorageId = model.StorageId,
                     CartItemId = null

@@ -20,5 +20,6 @@ namespace WebStore.Api.Models
         public ProductItem Product { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-    }
+        public float Weight { get; set; }
+	}
 }

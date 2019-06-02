@@ -7,8 +7,9 @@ namespace WebStore.Api.DataTransferObjects
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public float Weight { get; set; }
 
-        public AddressCoordinatesDTO Coordinates { get; set; }
+		public AddressCoordinatesDTO Coordinates { get; set; }
     }
 
     public class StorageDTO : StorageListItemDTO

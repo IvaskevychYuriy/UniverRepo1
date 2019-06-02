@@ -3,19 +3,12 @@
     <a [routerLink]="['/item', product.id]"><h3>{{product.name}}</h3></a>
     <p class="product-description-small">{{product.description}}</p>
     <div *ngIf="product.availableCount >= 1; then available else notAvailable"></div>
-    <!-- <button mat-icon-button *ngIf="authService.isInRole('Administrator')"
-        class="delete-product-btn" 
-        [disabled]="product.availableCount < 1" 
-        matTooltip="Delete product"
-        (click)="deleteProduct(product)">
-        <mat-icon>delete</mat-icon>
-    </button> -->
 </mat-card>
 
 <ng-template #available>
     <div class="add-to-cart-container">
         <input matInput [(ngModel)]="buyAmount" type="number" min="1" [max]="product.availableCount" class="buy-amount" required/>
-        <button mat-icon-button (click)="addToCart()">
+        <button mat-icon-button (click)="addToCart()" matTooltip="Add item to cart">
             <mat-icon>add_shopping_cart</mat-icon>
         </button>
     </div>

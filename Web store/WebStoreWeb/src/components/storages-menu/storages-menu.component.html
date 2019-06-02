@@ -27,6 +27,11 @@
         <form *ngIf="selectedStorage && selectedStorage.id" name="newDronesForm" (ngSubmit)="dronesForm.form.valid && addNewDrones()"
           #dronesForm="ngForm" novalidate>
           <mat-form-field>
+            <label for="dronesMaxWeight">Max Weight</label>
+            <input matInput type="number" min="0" class="form-control" name="dronesMaxWeight" [(ngModel)]="newDronesModel.maxWeight" #dronesQuantity="ngModel" required/>
+            <mat-error>Max Weight is required</mat-error>
+          </mat-form-field>
+          <mat-form-field>
             <label for="dronesQuantity">Quantity</label>
             <input matInput type="number" min="1" class="form-control" name="dronesQuantity" [(ngModel)]="newDronesModel.quantity" #dronesQuantity="ngModel" required/>
             <mat-error>Quantity is required</mat-error>
@@ -107,6 +112,11 @@
         <mat-cell *matCellDef="let element"> {{element.quantity}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="weight">
+        <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef style="max-width: 7%"> </mat-header-cell>
         <mat-cell *matCellDef="let element" style="max-width: 7%"> 
@@ -135,11 +145,6 @@
       <mat-header-row *matHeaderRowDef="dronesDisplayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: dronesDisplayedColumns;"></mat-row>
 
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
-      </ng-container>
-
       <ng-container matColumnDef="state">
         <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{droneState(element)}} </mat-cell>
@@ -148,6 +153,11 @@
       <ng-container matColumnDef="arrivalTime">
         <mat-header-cell *matHeaderCellDef> Arrival </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{droneArrival(element)}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="weight">
+        <mat-header-cell *matHeaderCellDef> MaxWeight </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.maxWeight}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -185,7 +195,7 @@
 </ng-template>
 
 <ng-template #addNewStorageTemplate>
-  <div>
+  <div *ngIf="storages && !storages.length">
     <h3>Add new Storage:</h3>
     <form name="newStorageForm" (ngSubmit)="storageForm.form.valid && addNewStorage()" #storageForm="ngForm" novalidate>
       <mat-form-field>

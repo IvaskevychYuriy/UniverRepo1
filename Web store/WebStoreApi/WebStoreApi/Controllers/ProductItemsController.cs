@@ -52,6 +52,8 @@ namespace WebStore.Api.Controllers
                 result = result.Take((int)pageSize);
             }
 
+			result = result.OrderBy(pi => pi.Name);
+
             return Ok(new PageDataDTO()
             {
                 ProductItems = await result.ProjectTo<ProductItemDTO>(_mapper.ConfigurationProvider).ToListAsync(),
