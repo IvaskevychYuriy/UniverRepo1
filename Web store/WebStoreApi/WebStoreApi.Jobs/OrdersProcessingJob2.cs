@@ -6,45 +6,110 @@ using System.Threading.Tasks;
 using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
 using WebStore.Models.Enumerations;
-using WebStoreApi.Jobs.Helpers;
 using WebStoreApi.Jobs.Models;
-using WebStoreApi.Logic.Simplex;
+using WebStoreApi.Logic.BinPacker;
+using WebStoreApi.Logic.BinPacker.Models;
 
 namespace WebStoreApi.Jobs
 {
-	public class OrdersProcessingJob
+	public class OrdersProcessingJob2
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public OrdersProcessingJob(ApplicationDbContext dbContext)
+        public OrdersProcessingJob2(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public async Task ProcessOrders()
         {
-            var info = await FetchInfo();
-            if (!info.Orders.Any() || !info.Storages.Any())
-            {
-                return;
-            }
-
-            var problemData = ProblemDataHelper.Generate(info);
-            var result = CalculateResult(problemData);
-            await ShipProducts(info, problemData, result);
+			var data = await GetProcessingDataAsync();
+			var input = MapToAlgoData(data);
+			var result = BinPacker.Pack(input);
+			await ShipProducts(data, result);
         }
 
-        private int[] CalculateResult(ProblemData problemData)
-        {
-            var result = new int[problemData.StoragesCount * problemData.ProductsCount * problemData.OrdersCount];
-            var simplex = new Simplex(problemData.Data);
+		private async Task<ProcessingData> GetProcessingDataAsync()
+		{
+			var data = new ProcessingData();
 
-            simplex.Calculate(result);
-            return result;
-        }
+			data.Storage = await GetStorageDataAsync();
+			data.Orders = await GetOrdersDataAsync();
 
-        // ships result[index] amount of j-th product from i-th storage for k-th order
-        private async Task ShipProducts(OrdersProcessingInfo info, ProblemData data, int[] result)
+			return data;
+		}
+
+		private Task<StorageData> GetStorageDataAsync()
+		{
+			return _dbContext.Storages
+				.AsNoTracking()
+				.Select(s => new StorageData()
+				{
+					StorageId = s.Id,
+					Coordinates = s.Coordinates,
+					Drones = s.Drones.Select(d => new DroneData()
+					{
+						DroneId = d.Id,
+						MaxWeight = d.MaxWeight
+					}).ToList()
+				})
+				.FirstAsync();
+		}
+
+		private Task<List<OrderData>> GetOrdersDataAsync()
+		{
+			return _dbContext.Orders
+				.AsNoTracking()
+				.Where(o => !o.HistoryRecords.Any(h => h.State == OrderStates.Done) && o.CartItems.Any(ci => ci.StorageItem == null))
+				.Select(o => new OrderData()
+				{
+					OrderId = o.Id,
+					Coordinates = o.Coordinates,
+					Products = o.CartItems.Select(ci => new CartItemData()
+					{
+						CartItemId = ci.Id,
+						Weight = ci.Product.Weight
+					}).ToList()
+				})
+				.ToListAsync();
+		}
+		
+		private BinPackerInput MapToAlgoData(ProcessingData data)
+		{
+			var result = new BinPackerInput();
+
+			result.Bins = data.Storage.Drones
+				.Select(d => new Bin()
+				{
+					Id = d.DroneId,
+					Capacity = d.MaxWeight
+				})
+				.ToList();
+
+			result.ItemSets = data.Orders
+				.Select(o => new ItemCollection()
+				{
+					Id = o.OrderId,
+					Items = o.Products
+						.Select(p => new Item()
+						{
+							Id = p.CartItemId,
+							Weight = p.Weight
+						})
+						.ToList()
+				})
+				.ToList();
+
+			return result;
+		}
+		
+		private Task ShipProducts(ProcessingData data, BinPackerResult result)
+		{
+			throw new NotImplementedException();
+		}
+
+		// ships result[index] amount of j-th product from i-th storage for k-th order
+		private async Task ShipProducts(OrdersProcessingInfo info, ProblemData data, int[] result)
         {
             var orderIds = info.Orders.Select(o => o.OrderId).ToList();
             var orders = await _dbContext.Orders
@@ -133,83 +198,6 @@ namespace WebStoreApi.Jobs
             }
 
             await _dbContext.SaveChangesAsync();
-        }
-
-        private async Task<OrdersProcessingInfo> FetchInfo()
-        {
-            var ordersData = await _dbContext.Orders
-                .AsNoTracking()
-                .Where(o => !o.HistoryRecords.Any(h => h.State == OrderStates.Done) && o.CartItems.Any(ci => ci.StorageItem == null))
-                .Select(o => new
-                {
-                    OrderId = o.Id,
-                    Coordinates = o.Coordinates,
-                    ProductCounts = o.CartItems
-                        .GroupBy(ci => ci.ProductId)
-                        .Select(g => new
-                        {
-                            ProductId = g.Key,
-                            Count = g.Count()
-                        })
-                        .ToList()
-                })
-                .ToListAsync();
-
-            var distinctProductIds = ordersData
-                .SelectMany(o => o.ProductCounts.Select(x => x.ProductId))
-                .Distinct()
-                .OrderBy(pid => pid)
-                .ToList();
-
-            var ordersInfo = ordersData
-                .Select(o => new OrderInfo()
-                {
-                    OrderId = o.OrderId,
-                    Coordinates = o.Coordinates,
-                    ProductCounts = distinctProductIds
-                        .Select(pid => o.ProductCounts.FirstOrDefault(x => x.ProductId == pid)?.Count ?? 0)
-                        .ToList()
-                })
-                .ToList();
-
-            var storagesData = await _dbContext.Storages
-                .AsNoTracking()
-                .Select(s => new
-                {
-                    StorageId = s.Id,
-                    Coordinates = s.Coordinates,
-                    DronesCount = s.Drones.Count(d => d.State == DroneStates.Available),
-                    ProductCounts = s.Items
-                        .Where(si => distinctProductIds.Contains(si.ProductId))
-                        .GroupBy(si => si.ProductId)
-                        .Select(g => new
-                        {
-                            ProductId = g.Key,
-                            Count = g.Count()
-                        })
-                        .ToList()
-                })
-                .ToListAsync();
-
-            var storagesInfo = storagesData
-                .Where(p => p.DronesCount > 0 && p.ProductCounts.Any())
-                .Select(o => new StorageInfo()
-                {
-                    StorageId = o.StorageId,
-                    Coordinates = o.Coordinates,
-                    DronesCount = o.DronesCount,
-                    ProductCounts = distinctProductIds
-                            .Select(pid => o.ProductCounts.FirstOrDefault(x => x.ProductId == pid)?.Count ?? 0)
-                            .ToList()
-                })
-                .ToList();
-
-            return new OrdersProcessingInfo()
-            {
-                Orders = ordersInfo,
-                Storages = storagesInfo,
-                ProductIds = distinctProductIds
-            };
         }
     }
 }

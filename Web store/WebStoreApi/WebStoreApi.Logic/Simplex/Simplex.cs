@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebStoreApi.Logic.Algorithms
+namespace WebStoreApi.Logic.Simplex
 {
     public class Simplex
     {
