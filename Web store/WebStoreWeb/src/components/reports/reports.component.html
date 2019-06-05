@@ -21,9 +21,10 @@
 <ng-template #droneStatistics>
   <h2 class="text-centered">Drones utilization</h2>
   <div style="display: flex; flex-direction: column">
-    <h4>Total average: {{droneUtilizationReport.totalAverage * 100 | number:'1.2-2' }}%</h4>
-    <h4>Min per order: {{droneUtilizationReport.minPerOrder * 100 | number:'1.2-2' }}%</h4>
-    <h4>Max per order: {{droneUtilizationReport.maxPerOrder * 100 | number:'1.2-2' }}%</h4>
+    <h4>Total average: {{ droneUtilizationReport.totalAverage * 100 | number:'1.2-2' }}%</h4>
+    <h4>Min per order: {{ droneUtilizationReport.minPerOrder * 100 | number:'1.2-2' }}%</h4>
+    <h4>Max per order: {{ droneUtilizationReport.maxPerOrder * 100 | number:'1.2-2' }}%</h4>
+    <h4>Items per drone average: {{ droneUtilizationReport.itemsPerDronePerOrderAverage | number:'1.2-2' }}</h4>
   </div>
 </ng-template>
 

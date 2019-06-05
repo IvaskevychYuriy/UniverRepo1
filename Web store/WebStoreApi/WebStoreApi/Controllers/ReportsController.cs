@@ -92,14 +92,17 @@ namespace WebStore.Api.Controllers
 				.GroupBy(x => x.OrderId)
 				.Select(g => new
 				{
-					PerOrderUtilization = g.Sum(x => x.LoadedWeight) / g.Sum(x => x.MaxWeight)
+					PerOrderUtilization = g.Sum(x => x.LoadedWeight) / g.Sum(x => x.MaxWeight),
+					ItemsPerOrder = g.Sum(x => x.Order.CartItems.Count()),
+					DronesPerOrder = g.Sum(x => x.Id)
 				});
 
 			var result = new DroneUtilizationReportDTO()
 			{
 				MinPerOrder = await records.MinAsync(x => x.PerOrderUtilization),
 				MaxPerOrder = await records.MaxAsync(x => x.PerOrderUtilization),
-				TotalAverage = await records.AverageAsync(x => x.PerOrderUtilization)
+				TotalAverage = await records.AverageAsync(x => x.PerOrderUtilization),
+				ItemsPerDronePerOrderAverage = await records.AverageAsync(x => (double)x.ItemsPerOrder / x.DronesPerOrder)
 			};
 
 			return Ok(result);
