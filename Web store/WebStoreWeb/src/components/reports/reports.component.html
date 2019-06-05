@@ -2,6 +2,9 @@
   <div *ngIf="!isLoading; then totalStatistics else loading">
   </div>
   <hr style="margin-top: 3em"/>
+  <div *ngIf="droneUtilizationReport; then droneStatistics else loading">
+  </div>
+  <hr style="margin-top: 3em"/>
   <div *ngIf="!isLoading; then itemsStatistics else loading">
   </div>
 </div>
@@ -9,9 +12,18 @@
 <ng-template #totalStatistics>
   <h2 class="text-centered">Total statistics:</h2>
   <div style="display: flex; flex-direction: row">
-    <p>Sold: {{ totalReport.soldCount }} items</p>
+    <h4>Sold: {{ totalReport.soldCount }} items</h4>
     <div class="flex-infinite-spacer"></div>
-    <p>Profit (income - cost): {{ totalReport.profit }}$ ({{ totalReport.income }}$ - {{ totalReport.cost }}$)</p>
+    <h4>Profit (income - cost): {{ totalReport.profit }}$ ({{ totalReport.income }}$ - {{ totalReport.cost }}$)</h4>
+  </div>
+</ng-template>
+
+<ng-template #droneStatistics>
+  <h2 class="text-centered">Drones utilization</h2>
+  <div style="display: flex; flex-direction: column">
+    <h4>Total average: {{droneUtilizationReport.totalAverage * 100 | number:'1.2-2' }}%</h4>
+    <h4>Min per order: {{droneUtilizationReport.minPerOrder * 100 | number:'1.2-2' }}%</h4>
+    <h4>Max per order: {{droneUtilizationReport.maxPerOrder * 100 | number:'1.2-2' }}%</h4>
   </div>
 </ng-template>
 
@@ -44,7 +56,7 @@
 
       <ng-container matColumnDef="profit">
         <mat-header-cell *matHeaderCellDef> Profit (avg / item) </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.profit}}$ ({{element.averageProfitPerItem}}$) </mat-cell>
+        <mat-cell *matCellDef="let element"> {{element.profit}}$ ({{element.averageProfitPerItem | number:'1.2-2'}}$) </mat-cell>
       </ng-container>
     </mat-table>
   </div>

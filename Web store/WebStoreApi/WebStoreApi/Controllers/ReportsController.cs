@@ -81,5 +81,28 @@ namespace WebStore.Api.Controllers
 
             return Ok(result);
         }
-    }
+		
+		// GET: api/<controller>/dronesUtilization
+		[HttpGet]
+		[Route("dronesUtilization")]
+		public async Task<IActionResult> GetDronesUtilization()
+		{
+			var records = _dbContext.DronePackingHistories
+				.AsNoTracking()
+				.GroupBy(x => x.OrderId)
+				.Select(g => new
+				{
+					PerOrderUtilization = g.Sum(x => x.LoadedWeight) / g.Sum(x => x.MaxWeight)
+				});
+
+			var result = new DroneUtilizationReportDTO()
+			{
+				MinPerOrder = await records.MinAsync(x => x.PerOrderUtilization),
+				MaxPerOrder = await records.MaxAsync(x => x.PerOrderUtilization),
+				TotalAverage = await records.AverageAsync(x => x.PerOrderUtilization)
+			};
+
+			return Ok(result);
+		}
+	}
 }

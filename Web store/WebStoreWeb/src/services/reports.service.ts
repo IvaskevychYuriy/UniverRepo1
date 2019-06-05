@@ -4,6 +4,8 @@ import { HttpClient } from "@angular/common/http";
 import { DatesRangeFilter } from '../models/dates-range-filter';
 import { ProductItemReport } from '../models/product-item-report';
 import { TotalReport } from '../models/total-report';
+import { Observable } from 'rxjs';
+import { DroneUtilizationReport } from '../models/drone-utilization-report';
 
 @Injectable()
 export class ReportsService {
@@ -18,5 +20,9 @@ export class ReportsService {
     public async totalReport(filter: DatesRangeFilter = null): Promise<TotalReport> {
         filter = filter || new DatesRangeFilter();
         return await this.http.get<TotalReport>(`reports/total?from=${filter.from}&to=${filter.to}`).toPromise();
+    }
+
+    public droneUtilizationReport(): Observable<DroneUtilizationReport> {
+        return this.http.get<DroneUtilizationReport>('reports/dronesUtilization');
     }
 }

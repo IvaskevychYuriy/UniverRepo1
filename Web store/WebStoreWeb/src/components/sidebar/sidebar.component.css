@@ -48,3 +48,7 @@
     background-color: royalblue !important;
     color: white !important;
 }
+
+.mat-nav-list {
+    width: 10em;
+}

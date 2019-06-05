@@ -145,6 +145,13 @@ namespace WebStoreApi.Jobs
 				drone.ArrivalTime = arrivalTime;
 				drone.State = DroneStates.Busy;
 
+				await _dbContext.DronePackingHistories.AddAsync(new DronePackingHistory()
+				{
+					OrderId = order.Id,
+					MaxWeight = drone.MaxWeight,
+					LoadedWeight = bin.ItemSet.TotalWeight
+				});
+
 				if (!order.HistoryRecords.Any(h => h.State == OrderStates.Processing))
 				{
 					order.HistoryRecords.Add(new OrderHistory()

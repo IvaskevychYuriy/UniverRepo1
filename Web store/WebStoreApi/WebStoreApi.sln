@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStoreApi.Logic", "WebSto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStoreApi.Jobs", "WebStoreApi.Jobs\WebStoreApi.Jobs.csproj", "{05ACF543-71BC-4550-8CA6-AC74FC60C16C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStoreApi.Logic.Tests", "WebStoreApi.Logic.Tests\WebStoreApi.Logic.Tests.csproj", "{D6438F52-EE4C-41ED-8544-87E912BF1C67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStoreApi.Logic.Tests", "WebStoreApi.Logic.Tests\WebStoreApi.Logic.Tests.csproj", "{D6438F52-EE4C-41ED-8544-87E912BF1C67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

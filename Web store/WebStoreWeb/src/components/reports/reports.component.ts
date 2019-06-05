@@ -5,6 +5,7 @@ import { ReportsService } from '../../services/reports.service';
 import { DataSource } from '@angular/cdk/table';
 import { CollectionViewer } from '@angular/cdk/collections';
 import { Observable, of } from 'rxjs';
+import { DroneUtilizationReport } from '../../models/drone-utilization-report';
 
 @Component({
   selector: 'reports',
@@ -17,6 +18,7 @@ export class ReportsComponent implements OnInit {
   private itemsReports: ProductItemReport[];
   private dataSource: ItemsReportsDataSource;
   private displayedColumns: string[];
+  private droneUtilizationReport: DroneUtilizationReport;
 
   constructor(
     private reportsService: ReportsService
@@ -29,6 +31,7 @@ export class ReportsComponent implements OnInit {
     this.itemsReports = await this.reportsService.productsReport();
     this.totalReport = await this.reportsService.totalReport();
     this.dataSource = new ItemsReportsDataSource(this.itemsReports);
+    this.reportsService.droneUtilizationReport().subscribe(x => this.droneUtilizationReport = x);
     this.isLoading = false;
   }
 }

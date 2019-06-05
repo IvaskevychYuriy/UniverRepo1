@@ -16,6 +16,7 @@ namespace WebStore.DAL.Contexts
         public DbSet<Storage> Storages { get; set; }
         public DbSet<StorageItem> StorageItems { get; set; }
         public DbSet<Drone> Drones { get; set; }
+		public DbSet<DronePackingHistory> DronePackingHistories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -106,6 +107,13 @@ namespace WebStore.DAL.Contexts
                 b.Property(e => e.ArrivalTime).HasConversion(x => x, x => x.HasValue ? DateTime.SpecifyKind(x.Value, DateTimeKind.Utc) : (DateTime?)null);
                 b.HasOne(e => e.Storage).WithMany(e => e.Drones).HasForeignKey(e => e.StorageId);
             });
-        }
+
+			builder.Entity<DronePackingHistory>(b =>
+			{
+				b.ToTable("DronePackingHistory");
+				b.HasKey(e => e.Id);
+				b.HasOne(e => e.Order).WithMany(e => e.DronePackingHistories).HasForeignKey(e => e.OrderId);
+			});
+		}
     }
 }

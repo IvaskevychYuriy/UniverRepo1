@@ -9,7 +9,8 @@ namespace WebStore.Models.Entities
         {
             CartItems = new HashSet<CartItem>();
             HistoryRecords = new HashSet<OrderHistory>();
-        }
+			DronePackingHistories = new HashSet<DronePackingHistory>();
+		}
 
         public decimal TotalPrice { get; set; }
 
@@ -22,5 +23,6 @@ namespace WebStore.Models.Entities
 
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<OrderHistory> HistoryRecords { get; set; }
-    }
+        public ICollection<DronePackingHistory> DronePackingHistories { get; set; }
+	}
 }
