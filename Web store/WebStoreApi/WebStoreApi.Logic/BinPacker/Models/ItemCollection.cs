@@ -7,6 +7,8 @@ namespace WebStoreApi.Logic.BinPacker.Models
 	{
 		public int Id { get; set; }
 
+		public int Priority { get; set; }
+
 		public List<Item> Items { get; set; }
 
 		public float TotalWeight => Items.Sum(x => x.Weight);

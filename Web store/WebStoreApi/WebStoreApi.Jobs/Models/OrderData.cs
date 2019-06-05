@@ -8,6 +8,8 @@ namespace WebStoreApi.Jobs.Models
 	{
 		public int OrderId { get; set; }
 
+		public int Priority { get; set; }
+
 		public AddressCoordinates Coordinates { get; set; }
 
 		public List<CartItemData> Products { get; set; }

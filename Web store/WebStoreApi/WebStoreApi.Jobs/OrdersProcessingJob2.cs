@@ -67,6 +67,7 @@ namespace WebStoreApi.Jobs
 				.Select(o => new OrderData()
 				{
 					OrderId = o.Id,
+					Priority = o.ProcessingPriority,
 					Coordinates = o.Coordinates,
 					Products = o.CartItems
 						.Where(c => c.StorageItem == null)
@@ -96,6 +97,7 @@ namespace WebStoreApi.Jobs
 				.Select(o => new ItemCollection()
 				{
 					Id = o.OrderId,
+					Priority = o.Priority,
 					Items = o.Products
 						.Select(p => new Item()
 						{
@@ -161,7 +163,24 @@ namespace WebStoreApi.Jobs
 						cartItem.DroneId = drone.Id;
 						storageItem.CartItemId = cartItem.Id;
 						storageItem.State = StorageItemStates.Ordered;
+						order.ProcessingPriority = 0;
 					}
+				}
+			}
+
+			var notShippedOrdersIds = data.Orders
+				.Select(o => o.OrderId)
+				.Except(ordersIds)
+				.ToList();
+
+			if (notShippedOrdersIds.Any())
+			{
+				var notShippedOrders = await _dbContext.Orders
+					.Where(o => notShippedOrdersIds.Contains(o.Id))
+					.ToListAsync();
+				foreach (var order in notShippedOrders)
+				{
+					order.ProcessingPriority += 1;
 				}
 			}
 

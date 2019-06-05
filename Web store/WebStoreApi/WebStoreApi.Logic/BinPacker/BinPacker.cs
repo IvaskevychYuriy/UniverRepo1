@@ -32,7 +32,8 @@ namespace WebStoreApi.Logic.BinPacker
 		private static BinPackerInput PrepareData(BinPackerInput data)
 		{
 			data.ItemSets = data.ItemSets
-				.OrderByDescending(s => s.Items.Count)
+				.OrderByDescending(s => s.Priority)
+				.ThenByDescending(s => s.Items.Count)
 				.ThenByDescending(s => s.TotalWeight)
 				.Select(s => new ItemCollection()
 				{

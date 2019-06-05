@@ -15,6 +15,8 @@ namespace WebStore.Models.Entities
 
         public AddressCoordinates Coordinates { get; set; }
 
+		public int ProcessingPriority { get; set; }
+
         public int UserId { get; set; }
         public virtual User User { get; set; }
 
