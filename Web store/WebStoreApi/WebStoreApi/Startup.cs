@@ -10,15 +10,10 @@ using WebStore.Models.Entities;
 using WebStore.Api.Extensions;
 using System.Threading.Tasks;
 using AutoMapper;
-using Hangfire;
-using Hangfire.AspNetCore;
-using WebStore.Api.Helpers;
-using WebStore.Api.Constants;
-using WebStoreApi.Jobs;
 
 namespace WebStore.Api
 {
-    public class Startup
+	public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -72,9 +67,6 @@ namespace WebStore.Api
             });
 
             services.AddCors();
-            
-            services.AddHangfire(cfg => 
-                cfg.UseSqlServerStorage(Configuration.GetConnectionString("HangfireDBConnection")));
 
             services.AddMvc();
             
@@ -101,31 +93,13 @@ namespace WebStore.Api
                 cfg.AllowAnyHeader();
                 cfg.WithOrigins("http://localhost:4200", "http://localhost:5000");
             });
-            
-            app.UseHangfireDashboard("/jobs", new DashboardOptions()
-            {
-                Authorization = new [] { new HandfireDashboardAuthFilter() }
-            });
-            app.UseHangfireServer(new BackgroundJobServerOptions()
-            {
-                Activator = new AspNetCoreJobActivator(app.ApplicationServices.GetRequiredService<IServiceScopeFactory>())
-            });
-
+           
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action}/{id?}");
             });
-
-            LaunchJobs();
-        }
-
-        private void LaunchJobs()
-        {
-            RecurringJob.AddOrUpdate<DronesUpdateSimulatorJob>(JobIds.DronesArrivalCheckerJob, job => job.UpdateDronesStates(), Cron.Minutely());
-            RecurringJob.AddOrUpdate<OrdersStateUpdateJob>(JobIds.OrdersStateUpdateJob, job => job.UpdateOrderStates(), Cron.MinuteInterval(2));
-            RecurringJob.AddOrUpdate<OrdersProcessingJob2>(JobIds.OrdersProcessingJob, job => job.ProcessOrders(), Cron.MinuteInterval(2));
         }
     }
 }

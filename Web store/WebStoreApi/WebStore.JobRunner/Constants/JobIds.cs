@@ -1,4 +1,4 @@
-﻿namespace WebStore.Api.Constants
+﻿namespace WebStore.JobRunner.Constants
 {
     public class JobIds
     {
