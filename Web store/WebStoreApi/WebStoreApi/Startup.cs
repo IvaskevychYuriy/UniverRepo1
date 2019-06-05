@@ -125,7 +125,7 @@ namespace WebStore.Api
         {
             RecurringJob.AddOrUpdate<DronesUpdateSimulatorJob>(JobIds.DronesArrivalCheckerJob, job => job.UpdateDronesStates(), Cron.Minutely());
             RecurringJob.AddOrUpdate<OrdersStateUpdateJob>(JobIds.OrdersStateUpdateJob, job => job.UpdateOrderStates(), Cron.MinuteInterval(2));
-            RecurringJob.AddOrUpdate<OrdersProcessingJob>(JobIds.OrdersProcessingJob, job => job.ProcessOrders(), Cron.MinuteInterval(2));
+            RecurringJob.AddOrUpdate<OrdersProcessingJob2>(JobIds.OrdersProcessingJob, job => job.ProcessOrders(), Cron.MinuteInterval(2));
         }
     }
 }

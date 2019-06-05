@@ -59,7 +59,7 @@ namespace WebStore.DAL.Contexts
                 b.HasKey(pi => pi.Id);
                 b.Property(pi => pi.ProductPrice).IsRequired();
                 b.HasOne(pi => pi.StorageItem).WithOne(si => si.CartItem).HasForeignKey<StorageItem>(si => si.CartItemId);
-                b.HasOne(pi => pi.Drone).WithOne(si => si.CartItem).HasForeignKey<Drone>(si => si.CartItemId);
+                b.HasOne(pi => pi.Drone).WithMany(si => si.CartItems).HasForeignKey(si => si.DroneId);
                 b.HasOne(pi => pi.Product).WithMany(pc => pc.CartItems).HasForeignKey(pi => pi.ProductId);
                 b.HasOne(pi => pi.Order).WithMany(pc => pc.CartItems).HasForeignKey(pi => pi.OrderId);
             });

@@ -8,8 +8,6 @@ using WebStore.DAL.Contexts;
 using WebStore.Models.Entities;
 using WebStore.Models.Enumerations;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebStore.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -38,8 +36,7 @@ namespace WebStore.Api.Controllers
 					State = DroneStates.Available,
 					MaxWeight = model.MaxWeight,
                     ArrivalTime = null,
-                    StorageId = model.StorageId,
-                    CartItemId = null
+                    StorageId = model.StorageId
                 });
             }
 

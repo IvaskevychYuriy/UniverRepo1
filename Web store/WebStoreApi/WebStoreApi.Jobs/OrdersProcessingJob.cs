@@ -106,7 +106,7 @@ namespace WebStoreApi.Jobs
                             .Where(ci => ci.ProductId == info.ProductIds[j] && ci.Drone == null && ci.StorageItem == null)
                             .ToList();
                         var drones = storages[i].Drones
-                            .Where(d => d.CartItemId == null)
+                            .Where(d => !d.CartItems.Any())
                             .ToList();
                         var items = storages[i].Items
                             .Where(it => it.ProductId == info.ProductIds[j] && it.CartItemId == null)
@@ -120,7 +120,7 @@ namespace WebStoreApi.Jobs
 
                             drones[l].ArrivalTime = arrivalTime;
                             drones[l].State = DroneStates.Busy;
-                            drones[l].CartItemId = cartItems[l].Id;
+							cartItems[l].DroneId = drones[l].Id;
 
                             cartItems[l].Drone = drones[l];
                             cartItems[l].StorageItem = items[l];

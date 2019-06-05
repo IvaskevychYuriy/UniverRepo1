@@ -25,17 +25,20 @@ namespace WebStoreApi.Jobs
         public async Task UpdateDronesStates()
         {
             var drones = await _dbContext.Drones
-                .Include(d => d.CartItem)
+                .Include(d => d.CartItems)
                 .ThenInclude(ci => ci.StorageItem)
-                .Where(d => d.State == DroneStates.Busy && d.CartItemId != null && d.ArrivalTime != null && d.ArrivalTime < DateTime.UtcNow)
+                .Where(d => d.State == DroneStates.Busy && d.CartItems.Any() && d.ArrivalTime != null && d.ArrivalTime < DateTime.UtcNow)
                 .ToListAsync();
             
             foreach (var drone in drones)
             {
                 drone.ArrivalTime = null;
-                drone.CartItem.StorageItem.State = StorageItemStates.Shipped;
-                drone.CartItemId = null;
                 drone.State = DroneStates.Available;
+				foreach (var item in drone.CartItems)
+				{
+					item.StorageItem.State = StorageItemStates.Shipped;
+					item.DroneId = null;
+				}
             }
 
             await _dbContext.SaveChangesAsync();

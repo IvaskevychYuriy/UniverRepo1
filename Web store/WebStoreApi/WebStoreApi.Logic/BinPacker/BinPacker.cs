@@ -78,6 +78,15 @@ namespace WebStoreApi.Logic.BinPacker
 
 		private static List<PackedBin> FirstFitDescending(List<PackedBin> bins, ItemCollection itemsCollection)
 		{
+			bins = bins
+				.Select(b => new PackedBin()
+				{
+					Id = b.Id,
+					Capacity = b.Capacity,
+					ItemSet = new ItemCollection() { Items = new List<Item>() }
+				})
+				.ToList();
+
 			foreach(var item in itemsCollection.Items)
 			{
 				var bin = bins.FirstOrDefault(b => item.Weight <= b.Capacity - b.ItemSet.TotalWeight);
@@ -119,8 +128,11 @@ namespace WebStoreApi.Logic.BinPacker
 
 			foreach (var bin in packedBins)
 			{
-				var smallerOrSameBinIndex = availableBins.FindIndex(b => b.Capacity >= bin.ItemSet.TotalWeight);
-				availableBins[smallerOrSameBinIndex].ItemSet = bin.ItemSet;
+				var smallerBinIndex = availableBins.FindIndex(b => b.ItemSet.Id == 0 && b.Capacity >= bin.ItemSet.TotalWeight);
+				if (smallerBinIndex != -1)
+				{
+					availableBins[smallerBinIndex].ItemSet = bin.ItemSet;
+				}
 			}
 
 			return availableBins

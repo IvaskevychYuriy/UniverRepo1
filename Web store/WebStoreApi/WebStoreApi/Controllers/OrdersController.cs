@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Api.DataTransferObjects;
@@ -104,7 +105,8 @@ namespace WebStore.Api.Controllers
             order.Coordinates = _mapper.Map<AddressCoordinates>(orderDto.Coordinates);
             order.HistoryRecords.Add(new OrderHistory()
             {
-                State = OrderStates.New
+                State = OrderStates.New,
+				StateChangeDate = DateTime.UtcNow
             });
 
             await _dbContext.Orders.AddAsync(order);

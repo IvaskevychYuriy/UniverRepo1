@@ -25,7 +25,7 @@ namespace WebStoreApi.Jobs
         {
 			var data = await GetProcessingDataAsync();
 			var input = MapToAlgoData(data);
-			var result = BinPacker.Pack(input);
+			var result = await Task.Run(() => BinPacker.Pack(input));
 			await ShipProducts(data, result);
         }
 
@@ -47,11 +47,14 @@ namespace WebStoreApi.Jobs
 				{
 					StorageId = s.Id,
 					Coordinates = s.Coordinates,
-					Drones = s.Drones.Select(d => new DroneData()
-					{
-						DroneId = d.Id,
-						MaxWeight = d.MaxWeight
-					}).ToList()
+					Drones = s.Drones
+						.Where(d => d.State == DroneStates.Available)
+						.Select(d => new DroneData()
+						{
+							DroneId = d.Id,
+							MaxWeight = d.MaxWeight
+						})
+						.ToList()
 				})
 				.FirstAsync();
 		}
@@ -65,11 +68,14 @@ namespace WebStoreApi.Jobs
 				{
 					OrderId = o.Id,
 					Coordinates = o.Coordinates,
-					Products = o.CartItems.Select(ci => new CartItemData()
-					{
-						CartItemId = ci.Id,
-						Weight = ci.Product.Weight
-					}).ToList()
+					Products = o.CartItems
+						.Where(c => c.StorageItem == null)
+						.Select(ci => new CartItemData()
+						{
+							CartItemId = ci.Id,
+							Weight = ci.Product.Weight
+						})
+						.ToList()
 				})
 				.ToListAsync();
 		}
@@ -103,101 +109,63 @@ namespace WebStoreApi.Jobs
 			return result;
 		}
 		
-		private Task ShipProducts(ProcessingData data, BinPackerResult result)
+		private async Task ShipProducts(ProcessingData data, BinPackerResult result)
 		{
-			throw new NotImplementedException();
+			var dronesIds = result.Bins.Select(b => b.Id).ToList();
+			var ordersIds = result.Bins.Select(b => b.ItemSet.Id).ToList();
+			var cartItemsIds = result.Bins.SelectMany(b => b.ItemSet.Items.Select(i => i.Id)).ToList();
+
+			var storage = await _dbContext.Storages
+				.Include(s => s.Items)
+				.FirstAsync(s => s.Id == data.Storage.StorageId);
+
+			var storageItems = storage.Items
+				.Where(i => i.CartItemId == null)
+				.ToList();
+
+			var drones = await _dbContext.Drones
+				.Where(d => d.StorageId == data.Storage.StorageId && dronesIds.Contains(d.Id))
+				.ToListAsync();
+
+			var orders = await _dbContext.Orders
+				.Include(o => o.HistoryRecords)
+				.Include(o => o.CartItems)
+				.Where(o => ordersIds.Contains(o.Id))
+				.ToListAsync();
+
+			var utcNow = DateTime.UtcNow;
+			foreach (var bin in result.Bins)
+			{
+				var drone = drones.First(d => d.Id == bin.Id);
+				var order = orders.First(o => o.Id == bin.ItemSet.Id);
+
+				var arrivalTime = utcNow.AddSeconds(order.Coordinates.Distance(storage.Coordinates) * 2); // 1 km/s twice the distance
+				drone.ArrivalTime = arrivalTime;
+				drone.State = DroneStates.Busy;
+
+				if (!order.HistoryRecords.Any(h => h.State == OrderStates.Processing))
+				{
+					order.HistoryRecords.Add(new OrderHistory()
+					{
+						State = OrderStates.Processing,
+						StateChangeDate = utcNow
+					});
+				}
+
+				foreach (var item in bin.ItemSet.Items)
+				{
+					var cartItem = order.CartItems.First(i => i.Id == item.Id);
+					var storageItem = storageItems.FirstOrDefault(i =>i.CartItemId == null && i.ProductId == cartItem.ProductId);
+					if (storageItem != null)
+					{
+						cartItem.DroneId = drone.Id;
+						storageItem.CartItemId = cartItem.Id;
+						storageItem.State = StorageItemStates.Ordered;
+					}
+				}
+			}
+
+			await _dbContext.SaveChangesAsync();
 		}
-
-		// ships result[index] amount of j-th product from i-th storage for k-th order
-		private async Task ShipProducts(OrdersProcessingInfo info, ProblemData data, int[] result)
-        {
-            var orderIds = info.Orders.Select(o => o.OrderId).ToList();
-            var orders = await _dbContext.Orders
-                .Where(o => orderIds.Contains(o.Id))
-                .Select(o => new
-                {
-                    Id = o.Id,
-                    HistoryRecords = o.HistoryRecords.ToList(),
-                    CartItems = o.CartItems
-                        .Where(ci => ci.StorageItem == null)
-                        .ToList()
-                })
-                .ToListAsync();
-
-            var storageIds = info.Storages.Select(s => s.StorageId).ToList();
-            var storages = await _dbContext.Storages
-                .Where(s => storageIds.Contains(s.Id))
-                .Select(s => new
-                {
-                    Storage = s,
-                    Items = s.Items
-                        .Where(i => i.CartItemId == null)
-                        .ToList(),
-                    Drones = s.Drones
-                        .Where(d => d.State == DroneStates.Available)
-                        .ToList()
-                })
-                .ToListAsync();
-
-            var utcNow = DateTime.UtcNow;
-
-            for (int k = 0; k < data.OrdersCount; k++)
-            {
-                if (!orders[k].HistoryRecords.Any(h => h.State == OrderStates.Processing))
-                {
-                    await _dbContext.OrderHistories.AddAsync(new OrderHistory()
-                    {
-                        OrderId = orders[k].Id,
-                        State = OrderStates.Processing,
-                        StateChangeDate = utcNow
-                    });
-                }
-            }
-
-            for (int i = 0; i < data.StoragesCount; i++)
-            {
-                for (int j = 0; j < data.ProductsCount; j++)
-                {
-                    for (int k = 0; k < data.OrdersCount; k++)
-                    {
-                        int index = i * data.ProductsCount * data.OrdersCount + j * data.OrdersCount + k;
-                        if (result[index] <= 0)
-                        {
-                            continue;
-                        }
-
-                        var arrivalTime = utcNow.AddSeconds(info.Orders[k].Coordinates.Distance(info.Storages[i].Coordinates) * 2); // 1 km/s twice the distance
-                        var cartItems = orders[k].CartItems
-                            .Where(ci => ci.ProductId == info.ProductIds[j] && ci.Drone == null && ci.StorageItem == null)
-                            .ToList();
-                        var drones = storages[i].Drones
-                            .Where(d => d.CartItemId == null)
-                            .ToList();
-                        var items = storages[i].Items
-                            .Where(it => it.ProductId == info.ProductIds[j] && it.CartItemId == null)
-                            .ToList();
-                        
-                        for (int l = 0; l < result[index] && l < cartItems.Count && l < drones.Count && l < items.Count; ++l)
-                        {
-                            _dbContext.Entry(drones[l]).State = EntityState.Modified;
-                            _dbContext.Entry(cartItems[l]).State = EntityState.Modified;
-                            _dbContext.Entry(items[l]).State = EntityState.Modified;
-
-                            drones[l].ArrivalTime = arrivalTime;
-                            drones[l].State = DroneStates.Busy;
-                            drones[l].CartItemId = cartItems[l].Id;
-
-                            cartItems[l].Drone = drones[l];
-                            cartItems[l].StorageItem = items[l];
-
-                            items[l].CartItemId = cartItems[l].Id;
-                            items[l].State = StorageItemStates.Ordered;
-                        }
-                    }
-                }
-            }
-
-            await _dbContext.SaveChangesAsync();
-        }
     }
 }

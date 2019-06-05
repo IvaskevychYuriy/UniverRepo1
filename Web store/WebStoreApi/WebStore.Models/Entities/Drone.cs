@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WebStore.Models.Enumerations;
 
 namespace WebStore.Models.Entities
@@ -11,8 +12,7 @@ namespace WebStore.Models.Entities
 
         public int StorageId { get; set; }
         public virtual Storage Storage { get; set; }
-
-        public int? CartItemId { get; set; }
-        public virtual CartItem CartItem { get; set; }
+		
+        public virtual List<CartItem> CartItems { get; set; }
     }
 }
