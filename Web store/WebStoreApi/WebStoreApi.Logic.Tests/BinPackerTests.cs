@@ -149,5 +149,47 @@ namespace WebStoreApi.Logic.Tests
 			// Assert
 			Assert.Equal(3, result.Bins.Count);
 		}
+
+		[Fact]
+		public void Pack_Should_Take_Prioritized_Items_First()
+		{
+			// Arrange
+			var data = new BinPackerInput()
+			{
+				Bins = new List<Bin>()
+				{
+					new Bin() { Id = 1, Capacity = 6f }
+				},
+				ItemSets = new List<ItemCollection>()
+				{
+					new ItemCollection()
+					{
+						Id = 1,
+						Priority = 0,
+						Items = new List<Item>()
+						{
+							new Item() { Id = 1, Weight = 1f },
+							new Item() { Id = 2, Weight = 2f }
+						}
+					},
+					new ItemCollection()
+					{
+						Id = 2,
+						Priority = 1,
+						Items = new List<Item>()
+						{
+							new Item() { Id = 1, Weight = 5f }
+						}
+					}
+				}
+			};
+
+			// Act
+			var result = BinPacker.BinPacker.Pack(data);
+
+			// Assert
+			Assert.Single(result.Bins);
+			Assert.Equal(2, result.Bins[0].ItemSet.Id);
+		}
 	}
 }
